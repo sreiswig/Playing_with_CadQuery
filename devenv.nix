@@ -8,11 +8,29 @@
   packages = [ 
     pkgs.libGL
     pkgs.stdenv.cc.cc.lib
+    pkgs.xorg.libX11
+    pkgs.xorg.libXext
+    pkgs.xorg.libXrender
+    pkgs.xorg.libICE
+    pkgs.xorg.libSM
+    pkgs.expat
+    pkgs.fontconfig
+    pkgs.freetype
+    pkgs.libxkbcommon
   ];
 
   env.LD_LIBRARY_PATH = pkgs.lib.makeLibraryPath [
     pkgs.libGL
     pkgs.stdenv.cc.cc.lib
+    pkgs.xorg.libX11
+    pkgs.xorg.libXext
+    pkgs.xorg.libXrender
+    pkgs.xorg.libICE
+    pkgs.xorg.libSM
+    pkgs.expat
+    pkgs.fontconfig
+    pkgs.freetype
+    pkgs.libxkbcommon
   ];
 
   # https://devenv.sh/languages/
