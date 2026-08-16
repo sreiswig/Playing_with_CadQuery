@@ -1,0 +1,41 @@
+{
+  "version": 1,
+  "units": "mm",
+  "raw_base": "https://raw.githubusercontent.com/sreiswig/Playing_with_CadQuery/main/",
+  "models": [
+    {
+      "id": "cat",
+      "source": "cat_model.py",
+      "builder": "cat_model:create_cat",
+      "units": "mm",
+      "description": "Vibe-coded cat (body, head, ears, legs, tail).",
+      "files": {
+        "step": {
+          "path": "cat.step",
+          "url": "https://raw.githubusercontent.com/sreiswig/Playing_with_CadQuery/main/cat.step"
+        },
+        "stl": {
+          "path": "artifacts/cat/cat.stl",
+          "url": "https://raw.githubusercontent.com/sreiswig/Playing_with_CadQuery/main/artifacts/cat/cat.stl"
+        }
+      }
+    },
+    {
+      "id": "drone",
+      "source": "drone.py",
+      "builder": "drone:create_drone",
+      "units": "mm",
+      "description": "Quadcopter: body, four arms, motors, simple props.",
+      "files": {
+        "step": {
+          "path": "drone.step",
+          "url": "https://raw.githubusercontent.com/sreiswig/Playing_with_CadQuery/main/drone.step"
+        },
+        "stl": {
+          "path": "artifacts/drone/drone.stl",
+          "url": "https://raw.githubusercontent.com/sreiswig/Playing_with_CadQuery/main/artifacts/drone/drone.stl"
+        }
+      }
+    }
+  ]
+}
