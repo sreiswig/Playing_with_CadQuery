@@ -40,6 +40,15 @@ python -m cq_artifacts url drone stl
 STL URLs 404 until someone has run `export` and committed the mesh (or you
 generate it locally). STEP at repo root is already committed.
 
+**Fetch into another program's working dir:**
+
+```bash
+python -m cq_artifacts fetch cat step -o /tmp/cat.step
+python -m cq_artifacts fetch drone stl -o ./meshes/drone.stl
+```
+
+Uses the local file if present, otherwise the raw GitHub URL.
+
 **Local:**
 
 ```bash
