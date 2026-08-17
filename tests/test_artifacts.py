@@ -77,5 +77,25 @@ class ArtifactCatalogTests(unittest.TestCase):
         self.assertNotEqual(proc.returncode, 0)
 
 
+    def test_fetch_prefers_local(self):
+        import tempfile
+        from cq_artifacts.fetch import fetch_file
+
+        with tempfile.TemporaryDirectory() as tmp:
+            tmp_path = Path(tmp)
+            src = tmp_path / "cat.step"
+            src.write_bytes(b"ISO-10303-fake")
+            dest = tmp_path / "out" / "cat.step"
+            result = fetch_file("cat", "step", dest, root=tmp_path)
+            self.assertEqual(result["source"], "local")
+            self.assertEqual(dest.read_bytes(), b"ISO-10303-fake")
+
+    def test_fetch_unknown_model(self):
+        from cq_artifacts.fetch import fetch_file
+
+        with self.assertRaises(KeyError):
+            fetch_file("nope", "step", Path("/tmp/x.step"))
+
+
 if __name__ == "__main__":
     unittest.main()

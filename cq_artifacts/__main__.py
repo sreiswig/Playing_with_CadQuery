@@ -1,4 +1,4 @@
-"""CLI: python -m cq_artifacts list|export|url|path"""
+"""CLI: python -m cq_artifacts list|export|url|path|fetch"""
 
 from __future__ import annotations
 
@@ -54,6 +54,20 @@ def _cmd_path(args: argparse.Namespace) -> int:
     return 0
 
 
+
+def _cmd_fetch(args: argparse.Namespace) -> int:
+    from .fetch import fetch_file
+
+    root = Path(args.root) if args.root else REPO_ROOT
+    try:
+        result = fetch_file(args.id, args.fmt, Path(args.out), ref=args.ref, root=root)
+    except KeyError as exc:
+        print(str(exc), file=sys.stderr)
+        return 1
+    print(json.dumps(result, indent=2))
+    return 0
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(
         prog="python -m cq_artifacts",
@@ -79,6 +93,14 @@ def main(argv: list[str] | None = None) -> int:
     p_path.add_argument("id")
     p_path.add_argument("fmt", choices=["step", "stl"])
     p_path.set_defaults(func=_cmd_path)
+
+    p_fetch = sub.add_parser("fetch", help="Copy or download a file for another program")
+    p_fetch.add_argument("id")
+    p_fetch.add_argument("fmt", choices=["step", "stl"])
+    p_fetch.add_argument("-o", "--out", required=True, help="Destination path")
+    p_fetch.add_argument("--ref", default="main")
+    p_fetch.add_argument("--root", help="Repo root override for local copy")
+    p_fetch.set_defaults(func=_cmd_fetch)
 
     args = parser.parse_args(argv)
     return args.func(args)
