@@ -29,6 +29,8 @@ That prints the same document as [`artifacts/manifest.json`](artifacts/manifest.
 - Manifest: https://raw.githubusercontent.com/sreiswig/Playing_with_CadQuery/main/artifacts/manifest.json
 - Cat STEP: https://raw.githubusercontent.com/sreiswig/Playing_with_CadQuery/main/cat.step
 - Drone STEP: https://raw.githubusercontent.com/sreiswig/Playing_with_CadQuery/main/drone.step
+- Cat STL: https://raw.githubusercontent.com/sreiswig/Playing_with_CadQuery/main/artifacts/cat/cat.stl
+- Drone STL: https://raw.githubusercontent.com/sreiswig/Playing_with_CadQuery/main/artifacts/drone/drone.stl
 
 Or:
 
@@ -37,8 +39,7 @@ python -m cq_artifacts url cat step
 python -m cq_artifacts url drone stl
 ```
 
-STL URLs 404 until someone has run `export` and committed the mesh (or you
-generate it locally). STEP at repo root is already committed.
+STEP and STL are both committed; `export` rebuilds them.
 
 **Fetch into another program's working dir:**
 
@@ -70,7 +71,7 @@ python -m cq_artifacts export --id cat
 
 Export imports `create_cat` / `create_drone` and writes:
 
-| id    | STEP (committed) | STL (generated)            |
+| id    | STEP (committed) | STL (committed)            |
 |-------|------------------|----------------------------|
 | cat   | `cat.step`       | `artifacts/cat/cat.stl`    |
 | drone | `drone.step`     | `artifacts/drone/drone.stl`|
