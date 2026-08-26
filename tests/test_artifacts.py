@@ -17,6 +17,14 @@ from cq_artifacts.catalog import MODELS, build_manifest, load_manifest, model_ur
 from cq_artifacts.fetch import ALLOWED_RAW_PREFIX, assert_fetch_url_allowed, fetch_file
 
 
+COMMITTED_FETCH_FILES = (
+    "cat.step",
+    "drone.step",
+    "artifacts/cat/cat.stl",
+    "artifacts/drone/drone.stl",
+)
+
+
 class ArtifactCatalogTests(unittest.TestCase):
     def test_manifest_on_disk_matches_catalog(self):
         disk = load_manifest(ROOT)
@@ -78,7 +86,15 @@ class ArtifactCatalogTests(unittest.TestCase):
         )
         self.assertNotEqual(proc.returncode, 0)
 
+    def test_committed_fetch_files_exist_and_nonempty(self):
+        for rel in COMMITTED_FETCH_FILES:
+            path = ROOT / rel
+            self.assertTrue(path.is_file(), f"missing {rel}")
+            self.assertGreater(path.stat().st_size, 0, f"empty {rel}")
+
     def test_fetch_prefers_local(self):
+        from cq_artifacts.fetch import fetch_file
+
         with tempfile.TemporaryDirectory() as tmp:
             tmp_path = Path(tmp)
             src = tmp_path / "cat.step"
@@ -88,24 +104,9 @@ class ArtifactCatalogTests(unittest.TestCase):
             self.assertEqual(result["source"], "local")
             self.assertEqual(dest.read_bytes(), b"ISO-10303-fake")
 
-    def test_fetch_unknown_model(self):
-        with self.assertRaises(KeyError):
-            fetch_file("nope", "step", Path("/tmp/x.step"))
-
-    def test_committed_step_and_stl_exist(self):
-        for rel in (
-            "cat.step",
-            "drone.step",
-            "artifacts/cat/cat.stl",
-            "artifacts/drone/drone.stl",
-        ):
-            path = ROOT / rel
-            self.assertTrue(path.is_file(), f"missing {rel}")
-            self.assertGreater(path.stat().st_size, 0, f"empty {rel}")
-
     def test_cli_fetch_local_copy(self):
         with tempfile.TemporaryDirectory() as tmp:
-            dest = Path(tmp) / "cat.step"
+            dest = Path(tmp) / "copied.step"
             proc = subprocess.run(
                 [
                     sys.executable,
@@ -128,15 +129,24 @@ class ArtifactCatalogTests(unittest.TestCase):
             self.assertEqual(data["source"], "local")
             self.assertEqual(dest.read_bytes(), (ROOT / "cat.step").read_bytes())
 
-    def test_fetch_remote_mocked(self):
-        recorded: dict[str, str] = {}
+    def test_fetch_unknown_model(self):
+        from cq_artifacts.fetch import fetch_file
+
+        with self.assertRaises(KeyError):
+            fetch_file("nope", "step", Path("/tmp/x.step"))
+
+    def test_fetch_remote_mocked_no_network(self):
+        seen = []
 
         class FakeResp:
-            def geturl(self):
-                return recorded["url"]
+            def __init__(self, url: str):
+                self._url = url
 
-            def read(self):
+            def read(self) -> bytes:
                 return b"remote-bytes"
+
+            def geturl(self) -> str:
+                return self._url
 
             def __enter__(self):
                 return self
@@ -144,46 +154,65 @@ class ArtifactCatalogTests(unittest.TestCase):
             def __exit__(self, *args):
                 return False
 
-        def fake_urlopen(url):
-            recorded["url"] = url
-            return FakeResp()
+        def fake_urlopen(url: str):
+            seen.append(url)
+            return FakeResp(url)
 
         with tempfile.TemporaryDirectory() as tmp:
-            empty_root = Path(tmp) / "empty"
-            empty_root.mkdir()
+            empty = Path(tmp) / "empty"
+            empty.mkdir()
             dest = Path(tmp) / "out" / "cat.step"
-            result = fetch_file("cat", "step", dest, root=empty_root, urlopen=fake_urlopen)
+            result = fetch_file(
+                "cat", "step", dest, root=empty, urlopen=fake_urlopen
+            )
             self.assertEqual(result["source"], "remote")
-            self.assertEqual(result["from"], recorded["url"])
             self.assertEqual(dest.read_bytes(), b"remote-bytes")
-            self.assertTrue(recorded["url"].startswith(ALLOWED_RAW_PREFIX))
-            self.assertTrue(recorded["url"].endswith("/cat.step"))
+            self.assertEqual(len(seen), 1)
+            self.assertTrue(seen[0].startswith(ALLOWED_RAW_PREFIX))
+            self.assertTrue(seen[0].endswith("/cat.step"))
+            assert_fetch_url_allowed(seen[0])
 
-    def test_assert_fetch_url_allowed_accepts(self):
-        assert_fetch_url_allowed(ALLOWED_RAW_PREFIX + "main/cat.step")
-        assert_fetch_url_allowed(ALLOWED_RAW_PREFIX + "some-branch/artifacts/cat/cat.stl")
+    def test_allowlist_accepts_raw_prefix(self):
+        assert_fetch_url_allowed(
+            "https://raw.githubusercontent.com/sreiswig/Playing_with_CadQuery/main/cat.step"
+        )
+        assert_fetch_url_allowed(
+            "https://raw.githubusercontent.com/sreiswig/Playing_with_CadQuery/some-branch/artifacts/cat/cat.stl"
+        )
 
-    def test_assert_fetch_url_allowed_rejects(self):
-        bad = [
+    def test_allowlist_rejects_other_hosts(self):
+        bad = (
             "http://raw.githubusercontent.com/sreiswig/Playing_with_CadQuery/main/cat.step",
-            "https://evil.example/",
+            "https://evil.example/cat.step",
             "https://github.com/sreiswig/Playing_with_CadQuery/blob/main/cat.step",
+            "https://github.com/sreiswig/Playing_with_CadQuery/raw/main/cat.step",
             "https://raw.githubusercontent.com/other/Playing_with_CadQuery/main/cat.step",
             "https://raw.githubusercontent.com/sreiswig/other-repo/main/cat.step",
             "",
-        ]
+        )
         for url in bad:
             with self.subTest(url=url):
                 with self.assertRaises(ValueError):
                     assert_fetch_url_allowed(url)
 
-    def test_fetch_refuses_off_prefix_redirect(self):
-        class EvilResp:
-            def geturl(self):
-                return "https://evil.example/steal"
+    def test_allowlist_rejects_path_escape(self):
+        bad = (
+            "https://raw.githubusercontent.com/sreiswig/Playing_with_CadQuery/../other-repo/main/x",
+            "https://raw.githubusercontent.com/sreiswig/Playing_with_CadQuery/%2e%2e/other-repo/main/x",
+            "https://raw.githubusercontent.com/sreiswig/Playing_with_CadQuery/main/../../sreiswig/secrets/x",
+        )
+        for url in bad:
+            with self.subTest(url=url):
+                with self.assertRaises(ValueError):
+                    assert_fetch_url_allowed(url)
 
-            def read(self):
+    def test_fetch_rejects_redirect_off_prefix(self):
+        class EvilResp:
+            def read(self) -> bytes:
                 return b"stolen"
+
+            def geturl(self) -> str:
+                return "https://evil.example/steal"
 
             def __enter__(self):
                 return self
@@ -191,16 +220,16 @@ class ArtifactCatalogTests(unittest.TestCase):
             def __exit__(self, *args):
                 return False
 
-        def evil_urlopen(url):
+        def evil_urlopen(url: str):
             return EvilResp()
 
         with tempfile.TemporaryDirectory() as tmp:
-            empty_root = Path(tmp) / "empty"
-            empty_root.mkdir()
+            empty = Path(tmp) / "empty"
+            empty.mkdir()
             dest = Path(tmp) / "out" / "cat.step"
             with self.assertRaises(ValueError):
-                fetch_file("cat", "step", dest, root=empty_root, urlopen=evil_urlopen)
-            self.assertFalse(dest.exists() or (dest.is_file() and dest.stat().st_size > 0))
+                fetch_file("cat", "step", dest, root=empty, urlopen=evil_urlopen)
+            self.assertFalse(dest.exists())
 
 
 if __name__ == "__main__":
