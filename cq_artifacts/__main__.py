@@ -54,7 +54,6 @@ def _cmd_path(args: argparse.Namespace) -> int:
     return 0
 
 
-
 def _cmd_fetch(args: argparse.Namespace) -> int:
     from .fetch import fetch_file
 
@@ -62,6 +61,9 @@ def _cmd_fetch(args: argparse.Namespace) -> int:
     try:
         result = fetch_file(args.id, args.fmt, Path(args.out), ref=args.ref, root=root)
     except KeyError as exc:
+        print(str(exc), file=sys.stderr)
+        return 1
+    except ValueError as exc:
         print(str(exc), file=sys.stderr)
         return 1
     print(json.dumps(result, indent=2))
