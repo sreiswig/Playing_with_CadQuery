@@ -49,6 +49,8 @@ python -m cq_artifacts fetch drone stl -o ./meshes/drone.stl
 ```
 
 Uses the local file if present, otherwise the raw GitHub URL.
+Remote fetch is allowlisted to `https://raw.githubusercontent.com/sreiswig/Playing_with_CadQuery/`
+and refuses other hosts, `http`, and path-escape / off-prefix redirects.
 
 **Local:**
 
