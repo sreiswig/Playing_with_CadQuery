@@ -35,6 +35,17 @@ MODELS: list[dict[str, Any]] = [
             "stl": "artifacts/drone/drone.stl",
         },
     },
+    {
+        "id": "sonic",
+        "source": "sonic.py",
+        "builder": "sonic:create_sonic",
+        "units": "mm",
+        "description": "Stylized chibi hedgehog (quills, muzzle, gloves, oversized shoes). Original geometry.",
+        "files": {
+            "step": "sonic.step",
+            "stl": "artifacts/sonic/sonic.stl",
+        },
+    },
 ]
 
 

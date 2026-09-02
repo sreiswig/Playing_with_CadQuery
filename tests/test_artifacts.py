@@ -20,8 +20,10 @@ from cq_artifacts.fetch import ALLOWED_RAW_PREFIX, assert_fetch_url_allowed, fet
 COMMITTED_FETCH_FILES = (
     "cat.step",
     "drone.step",
+    "sonic.step",
     "artifacts/cat/cat.stl",
     "artifacts/drone/drone.stl",
+    "artifacts/sonic/sonic.stl",
 )
 
 
@@ -57,7 +59,9 @@ class ArtifactCatalogTests(unittest.TestCase):
         )
         data = json.loads(proc.stdout)
         self.assertEqual(data["version"], 1)
-        self.assertGreaterEqual({m["id"] for m in data["models"]}, {"cat", "drone"})
+        ids = {m["id"] for m in data["models"]}
+        self.assertGreaterEqual(ids, {"cat", "drone", "sonic"})
+        self.assertIn("sonic", ids)
 
     def test_cli_url_and_path_cat_step(self):
         url = subprocess.run(
@@ -76,6 +80,50 @@ class ArtifactCatalogTests(unittest.TestCase):
             text=True,
         ).stdout.strip()
         self.assertTrue(path.endswith("cat.step"))
+
+    def test_cli_url_and_path_sonic_step_and_stl(self):
+        url = subprocess.run(
+            [sys.executable, "-m", "cq_artifacts", "url", "sonic", "step"],
+            cwd=ROOT,
+            check=True,
+            capture_output=True,
+            text=True,
+        ).stdout.strip()
+        self.assertTrue(url.endswith("/sonic.step"))
+        self.assertTrue(
+            url.startswith(
+                "https://raw.githubusercontent.com/sreiswig/Playing_with_CadQuery/"
+            )
+        )
+        path = subprocess.run(
+            [sys.executable, "-m", "cq_artifacts", "path", "sonic", "step"],
+            cwd=ROOT,
+            check=True,
+            capture_output=True,
+            text=True,
+        ).stdout.strip()
+        self.assertTrue(path.endswith("sonic.step"))
+        stl_url = subprocess.run(
+            [sys.executable, "-m", "cq_artifacts", "url", "sonic", "stl"],
+            cwd=ROOT,
+            check=True,
+            capture_output=True,
+            text=True,
+        ).stdout.strip()
+        self.assertTrue(stl_url.endswith("/artifacts/sonic/sonic.stl"))
+        self.assertTrue(
+            stl_url.startswith(
+                "https://raw.githubusercontent.com/sreiswig/Playing_with_CadQuery/"
+            )
+        )
+        stl_path = subprocess.run(
+            [sys.executable, "-m", "cq_artifacts", "path", "sonic", "stl"],
+            cwd=ROOT,
+            check=True,
+            capture_output=True,
+            text=True,
+        ).stdout.strip()
+        self.assertTrue(stl_path.endswith("artifacts/sonic/sonic.stl"))
 
     def test_unknown_model_url_fails(self):
         proc = subprocess.run(
@@ -129,6 +177,31 @@ class ArtifactCatalogTests(unittest.TestCase):
             self.assertEqual(data["source"], "local")
             self.assertEqual(dest.read_bytes(), (ROOT / "cat.step").read_bytes())
 
+    def test_cli_fetch_local_sonic_step(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            dest = Path(tmp) / "copied.step"
+            proc = subprocess.run(
+                [
+                    sys.executable,
+                    "-m",
+                    "cq_artifacts",
+                    "fetch",
+                    "sonic",
+                    "step",
+                    "-o",
+                    str(dest),
+                    "--root",
+                    str(ROOT),
+                ],
+                cwd=ROOT,
+                check=True,
+                capture_output=True,
+                text=True,
+            )
+            data = json.loads(proc.stdout)
+            self.assertEqual(data["source"], "local")
+            self.assertEqual(dest.read_bytes(), (ROOT / "sonic.step").read_bytes())
+
     def test_fetch_unknown_model(self):
         from cq_artifacts.fetch import fetch_file
 
@@ -178,6 +251,12 @@ class ArtifactCatalogTests(unittest.TestCase):
         )
         assert_fetch_url_allowed(
             "https://raw.githubusercontent.com/sreiswig/Playing_with_CadQuery/some-branch/artifacts/cat/cat.stl"
+        )
+        assert_fetch_url_allowed(
+            "https://raw.githubusercontent.com/sreiswig/Playing_with_CadQuery/main/sonic.step"
+        )
+        assert_fetch_url_allowed(
+            "https://raw.githubusercontent.com/sreiswig/Playing_with_CadQuery/main/artifacts/sonic/sonic.stl"
         )
 
     def test_allowlist_rejects_other_hosts(self):

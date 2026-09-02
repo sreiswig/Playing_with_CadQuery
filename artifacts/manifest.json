@@ -36,6 +36,23 @@
           "url": "https://raw.githubusercontent.com/sreiswig/Playing_with_CadQuery/main/artifacts/drone/drone.stl"
         }
       }
+    },
+    {
+      "id": "sonic",
+      "source": "sonic.py",
+      "builder": "sonic:create_sonic",
+      "units": "mm",
+      "description": "Stylized chibi hedgehog (quills, muzzle, gloves, oversized shoes). Original geometry.",
+      "files": {
+        "step": {
+          "path": "sonic.step",
+          "url": "https://raw.githubusercontent.com/sreiswig/Playing_with_CadQuery/main/sonic.step"
+        },
+        "stl": {
+          "path": "artifacts/sonic/sonic.stl",
+          "url": "https://raw.githubusercontent.com/sreiswig/Playing_with_CadQuery/main/artifacts/sonic/sonic.stl"
+        }
+      }
     }
   ]
 }

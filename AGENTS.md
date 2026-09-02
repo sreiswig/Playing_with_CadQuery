@@ -1,6 +1,6 @@
 # Agent guide — Playing_with_CadQuery
 
-CadQuery playground. Two solid models live here: **cat** and **drone**.
+CadQuery playground. Three solid models live here: **cat**, **drone**, and **sonic**.
 Other scripts (`tutorial.py`, `visuals.py`, `workplane_examples.py`) are
 learning notes, not export targets.
 
@@ -29,14 +29,17 @@ That prints the same document as [`artifacts/manifest.json`](artifacts/manifest.
 - Manifest: https://raw.githubusercontent.com/sreiswig/Playing_with_CadQuery/main/artifacts/manifest.json
 - Cat STEP: https://raw.githubusercontent.com/sreiswig/Playing_with_CadQuery/main/cat.step
 - Drone STEP: https://raw.githubusercontent.com/sreiswig/Playing_with_CadQuery/main/drone.step
+- Sonic STEP: https://raw.githubusercontent.com/sreiswig/Playing_with_CadQuery/main/sonic.step
 - Cat STL: https://raw.githubusercontent.com/sreiswig/Playing_with_CadQuery/main/artifacts/cat/cat.stl
 - Drone STL: https://raw.githubusercontent.com/sreiswig/Playing_with_CadQuery/main/artifacts/drone/drone.stl
+- Sonic STL: https://raw.githubusercontent.com/sreiswig/Playing_with_CadQuery/main/artifacts/sonic/sonic.stl
 
 Or:
 
 ```bash
 python -m cq_artifacts url cat step
 python -m cq_artifacts url drone stl
+python -m cq_artifacts url sonic step
 ```
 
 STEP and STL are both committed; `export` rebuilds them.
@@ -46,6 +49,7 @@ STEP and STL are both committed; `export` rebuilds them.
 ```bash
 python -m cq_artifacts fetch cat step -o /tmp/cat.step
 python -m cq_artifacts fetch drone stl -o ./meshes/drone.stl
+python -m cq_artifacts fetch sonic step -o /tmp/sonic.step
 ```
 
 Uses the local file if present, otherwise the raw GitHub URL.
@@ -69,14 +73,16 @@ Units are millimetres.
 ```bash
 python -m cq_artifacts export          # all models → STEP + STL
 python -m cq_artifacts export --id cat
+python -m cq_artifacts export --id sonic
 ```
 
-Export imports `create_cat` / `create_drone` and writes:
+Export imports `create_cat` / `create_drone` / `create_sonic` and writes:
 
-| id    | STEP (committed) | STL (committed)            |
-|-------|------------------|----------------------------|
-| cat   | `cat.step`       | `artifacts/cat/cat.stl`    |
-| drone | `drone.step`     | `artifacts/drone/drone.stl`|
+| id    | STEP (committed) | STL (committed)              |
+|-------|------------------|------------------------------|
+| cat   | `cat.step`       | `artifacts/cat/cat.stl`      |
+| drone | `drone.step`     | `artifacts/drone/drone.stl`  |
+| sonic | `sonic.step`     | `artifacts/sonic/sonic.stl`  |
 
 Then refreshes `artifacts/manifest.json`.
 
