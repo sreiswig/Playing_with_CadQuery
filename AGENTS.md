@@ -1,6 +1,8 @@
 # Agent guide — Playing_with_CadQuery
 
-CadQuery playground. Three solid models live here: **cat**, **drone**, and **sonic**.
+CadQuery playground. Solid models: **cat**, **drone**, **sonic** (figures), and **box**
+(first mechanical catalog part). Ranked mechanical roadmap:
+[`docs/MECH_CATALOG.md`](docs/MECH_CATALOG.md) (v0.1).
 Other scripts (`tutorial.py`, `visuals.py`, `workplane_examples.py`) are
 learning notes, not export targets.
 
@@ -30,9 +32,11 @@ That prints the same document as [`artifacts/manifest.json`](artifacts/manifest.
 - Cat STEP: https://raw.githubusercontent.com/sreiswig/Playing_with_CadQuery/main/cat.step
 - Drone STEP: https://raw.githubusercontent.com/sreiswig/Playing_with_CadQuery/main/drone.step
 - Sonic STEP: https://raw.githubusercontent.com/sreiswig/Playing_with_CadQuery/main/sonic.step
+- Box STEP: https://raw.githubusercontent.com/sreiswig/Playing_with_CadQuery/main/box.step
 - Cat STL: https://raw.githubusercontent.com/sreiswig/Playing_with_CadQuery/main/artifacts/cat/cat.stl
 - Drone STL: https://raw.githubusercontent.com/sreiswig/Playing_with_CadQuery/main/artifacts/drone/drone.stl
 - Sonic STL: https://raw.githubusercontent.com/sreiswig/Playing_with_CadQuery/main/artifacts/sonic/sonic.stl
+- Box STL: https://raw.githubusercontent.com/sreiswig/Playing_with_CadQuery/main/artifacts/box/box.stl
 
 Or:
 
@@ -40,6 +44,7 @@ Or:
 python -m cq_artifacts url cat step
 python -m cq_artifacts url drone stl
 python -m cq_artifacts url sonic step
+python -m cq_artifacts url box step
 ```
 
 STEP and STL are both committed; `export` rebuilds them.
@@ -50,6 +55,7 @@ STEP and STL are both committed; `export` rebuilds them.
 python -m cq_artifacts fetch cat step -o /tmp/cat.step
 python -m cq_artifacts fetch drone stl -o ./meshes/drone.stl
 python -m cq_artifacts fetch sonic step -o /tmp/sonic.step
+python -m cq_artifacts fetch box step -o /tmp/box.step
 ```
 
 Uses the local file if present, otherwise the raw GitHub URL.
@@ -74,15 +80,17 @@ Units are millimetres.
 python -m cq_artifacts export          # all models → STEP + STL
 python -m cq_artifacts export --id cat
 python -m cq_artifacts export --id sonic
+python -m cq_artifacts export --id box
 ```
 
-Export imports `create_cat` / `create_drone` / `create_sonic` and writes:
+Export imports `create_cat` / `create_drone` / `create_sonic` / `create_box` and writes:
 
 | id    | STEP (committed) | STL (committed)              |
 |-------|------------------|------------------------------|
 | cat   | `cat.step`       | `artifacts/cat/cat.stl`      |
 | drone | `drone.step`     | `artifacts/drone/drone.stl`  |
 | sonic | `sonic.step`     | `artifacts/sonic/sonic.stl`  |
+| box   | `box.step`       | `artifacts/box/box.stl`      |
 
 Then refreshes `artifacts/manifest.json`.
 
@@ -94,6 +102,7 @@ Do not add a server or auth. This repo is files + a CLI.
 2. Register it in `cq_artifacts/catalog.py` `MODELS`.
 3. Run `python -m cq_artifacts export --id <id>`.
 4. Commit STEP if it is small. Skip huge binaries.
+5. For mechanical parts, follow the ranked list in [`docs/MECH_CATALOG.md`](docs/MECH_CATALOG.md).
 
 ## Out of scope
 
