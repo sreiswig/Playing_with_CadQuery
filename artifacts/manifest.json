@@ -53,6 +53,23 @@
           "url": "https://raw.githubusercontent.com/sreiswig/Playing_with_CadQuery/main/artifacts/sonic/sonic.stl"
         }
       }
+    },
+    {
+      "id": "box",
+      "source": "box.py",
+      "builder": "box:create_box",
+      "units": "mm",
+      "description": "Parametric rectangular prism (CadQuery box). Defaults 10×10×10 mm.",
+      "files": {
+        "step": {
+          "path": "box.step",
+          "url": "https://raw.githubusercontent.com/sreiswig/Playing_with_CadQuery/main/box.step"
+        },
+        "stl": {
+          "path": "artifacts/box/box.stl",
+          "url": "https://raw.githubusercontent.com/sreiswig/Playing_with_CadQuery/main/artifacts/box/box.stl"
+        }
+      }
     }
   ]
 }
