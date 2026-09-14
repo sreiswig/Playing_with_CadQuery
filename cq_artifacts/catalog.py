@@ -46,6 +46,17 @@ MODELS: list[dict[str, Any]] = [
             "stl": "artifacts/sonic/sonic.stl",
         },
     },
+    {
+        "id": "box",
+        "source": "box.py",
+        "builder": "box:create_box",
+        "units": "mm",
+        "description": "Parametric rectangular prism (CadQuery box). Defaults 10×10×10 mm.",
+        "files": {
+            "step": "box.step",
+            "stl": "artifacts/box/box.stl",
+        },
+    },
 ]
 
 
