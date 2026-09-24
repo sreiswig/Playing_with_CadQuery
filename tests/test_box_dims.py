@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import math
 import sys
 import unittest
 from pathlib import Path
@@ -54,7 +55,12 @@ class BoxDimsTests(unittest.TestCase):
                 self.assertIsInstance(found, Err)
                 self.assertIs(found.error.code, code)
                 self.assertEqual(found.error.field, field)
-                self.assertEqual(found.error.value, args[{"length": 0, "width": 1, "height": 2}[field]])
+                expected = args[{"length": 0, "width": 1, "height": 2}[field]]
+                if isinstance(expected, float) and math.isnan(expected):
+                    self.assertIsInstance(found.error.value, float)
+                    self.assertTrue(math.isnan(found.error.value))
+                else:
+                    self.assertEqual(found.error.value, expected)
 
     def test_deny_message(self):
         found = make_box_size(-1, 10, 10)
