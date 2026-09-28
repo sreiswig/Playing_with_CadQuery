@@ -8,6 +8,8 @@ import sys
 from pathlib import Path
 
 from .catalog import MODELS, REPO_ROOT, build_manifest, model_url, write_manifest
+from .catalog_lookup import lookup_artifact, lookup_deny_message
+from .outcome import Err
 
 
 def _cmd_list(_args: argparse.Namespace) -> int:
@@ -28,27 +30,25 @@ def _cmd_export(args: argparse.Namespace) -> int:
     return 0
 
 
+def _require_relpath(model_id: str, fmt: str) -> str | None:
+    found = lookup_artifact(MODELS, model_id, fmt)
+    if isinstance(found, Err):
+        print(lookup_deny_message(found.error, include_known=False), file=sys.stderr)
+        return None
+    return found.value.relpath
+
+
 def _cmd_url(args: argparse.Namespace) -> int:
-    match = next((m for m in MODELS if m["id"] == args.id), None)
-    if match is None:
-        print(f"unknown model {args.id!r}", file=sys.stderr)
-        return 1
-    rel = match["files"].get(args.fmt)
-    if not rel:
-        print(f"no {args.fmt} for {args.id}", file=sys.stderr)
+    rel = _require_relpath(args.id, args.fmt)
+    if rel is None:
         return 1
     print(model_url(rel, ref=args.ref))
     return 0
 
 
 def _cmd_path(args: argparse.Namespace) -> int:
-    match = next((m for m in MODELS if m["id"] == args.id), None)
-    if match is None:
-        print(f"unknown model {args.id!r}", file=sys.stderr)
-        return 1
-    rel = match["files"].get(args.fmt)
-    if not rel:
-        print(f"no {args.fmt} for {args.id}", file=sys.stderr)
+    rel = _require_relpath(args.id, args.fmt)
+    if rel is None:
         return 1
     print(REPO_ROOT / rel)
     return 0

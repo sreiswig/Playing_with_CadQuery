@@ -2,44 +2,34 @@
 
 from __future__ import annotations
 
-import urllib.parse
 import urllib.request
 from pathlib import Path
 
 from .catalog import MODELS, REPO_ROOT, model_url
-
-ALLOWED_HOST = "raw.githubusercontent.com"
-ALLOWED_PATH_PREFIX = "/sreiswig/Playing_with_CadQuery/"
-ALLOWED_RAW_PREFIX = f"https://{ALLOWED_HOST}{ALLOWED_PATH_PREFIX}"
+from .catalog_lookup import lookup_artifact, lookup_deny_message
+from .fetch_policy import (
+    ALLOWED_HOST,
+    ALLOWED_PATH_PREFIX,
+    ALLOWED_RAW_PREFIX,
+    check_fetch_url,
+    fetch_deny_message,
+)
+from .outcome import Err
 
 
 def assert_fetch_url_allowed(url: str) -> None:
     """Remote fetch may only hit this repo's raw.githubusercontent.com tree."""
-    if not isinstance(url, str) or not url:
-        raise ValueError(f"refusing fetch: {url!r} is not under {ALLOWED_RAW_PREFIX}")
-    parts = urllib.parse.urlsplit(url)
-    if parts.scheme != "https" or parts.netloc != ALLOWED_HOST:
-        raise ValueError(f"refusing fetch: {url!r} is not under {ALLOWED_RAW_PREFIX}")
-    if parts.username or parts.password:
-        raise ValueError(f"refusing fetch: {url!r} is not under {ALLOWED_RAW_PREFIX}")
-    path = urllib.parse.unquote(parts.path.replace("\\", "/"))
-    segments = [s for s in path.split("/") if s not in ("", ".")]
-    if ".." in segments:
-        raise ValueError(f"refusing fetch: {url!r} is not under {ALLOWED_RAW_PREFIX}")
-    normalized = "/" + "/".join(segments)
-    if not normalized.startswith(ALLOWED_PATH_PREFIX):
-        raise ValueError(f"refusing fetch: {url!r} is not under {ALLOWED_RAW_PREFIX}")
+    checked = check_fetch_url(url)
+    if isinstance(checked, Err):
+        raise ValueError(fetch_deny_message(checked.error))
 
 
 def resolve(model_id: str, fmt: str) -> tuple[dict, str]:
-    match = next((m for m in MODELS if m["id"] == model_id), None)
-    if match is None:
-        known = ", ".join(m["id"] for m in MODELS)
-        raise KeyError(f"unknown model {model_id!r}; known: {known}")
-    rel = match["files"].get(fmt)
-    if not rel:
-        raise KeyError(f"no {fmt} for {model_id}")
-    return match, rel
+    found = lookup_artifact(MODELS, model_id, fmt)
+    if isinstance(found, Err):
+        raise KeyError(lookup_deny_message(found.error, include_known=True))
+    match = next(row for row in MODELS if row["id"] == model_id)
+    return match, found.value.relpath
 
 
 def fetch_file(

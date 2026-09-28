@@ -7,6 +7,8 @@ from pathlib import Path
 from typing import Any
 
 from .catalog import MODELS, REPO_ROOT, write_manifest
+from .catalog_lookup import lookup_deny_message, lookup_model
+from .outcome import Err
 
 
 def _load_builder(spec: str):
@@ -24,14 +26,14 @@ def _export_shape(shape: Any, dest: Path) -> None:
 
 def export_model(model_id: str, root: Path | None = None) -> dict[str, str]:
     root = root or REPO_ROOT
-    match = next((m for m in MODELS if m["id"] == model_id), None)
-    if match is None:
-        known = ", ".join(m["id"] for m in MODELS)
-        raise KeyError(f"unknown model {model_id!r}; known: {known}")
+    found = lookup_model(MODELS, model_id)
+    if isinstance(found, Err):
+        raise KeyError(lookup_deny_message(found.error, include_known=True))
+    row = found.value
 
-    shape = _load_builder(match["builder"])()
+    shape = _load_builder(row.builder)()
     written: dict[str, str] = {}
-    for fmt, rel in match["files"].items():
+    for fmt, rel in row.files:
         dest = root / rel
         _export_shape(shape, dest)
         written[fmt] = rel
