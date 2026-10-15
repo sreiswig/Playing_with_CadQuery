@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import os
+import tempfile
 import urllib.request
 from pathlib import Path
 
@@ -15,6 +17,14 @@ from .fetch_policy import (
     fetch_deny_message,
 )
 from .outcome import Err
+
+# 32 MiB is well above the largest committed artifact (cat.stl, about 626 KB).
+MAX_FETCH_BYTES = 32 * 1024 * 1024
+DEFAULT_FETCH_TIMEOUT = 30
+
+
+class FetchTooLargeError(Exception):
+    """Remote artifact body exceeded the configured byte cap."""
 
 
 def assert_fetch_url_allowed(url: str) -> None:
@@ -32,6 +42,43 @@ def resolve(model_id: str, fmt: str) -> tuple[dict, str]:
     return match, found.value.relpath
 
 
+def _read_bounded(resp, max_bytes: int) -> bytes:
+    """Read up to ``max_bytes`` from ``resp``.
+
+    One ``read(max_bytes + 1)`` keeps a body that is exactly at the cap and
+    rejects anything larger.
+    """
+    data = resp.read(max_bytes + 1)
+    if len(data) > max_bytes:
+        raise FetchTooLargeError(f"remote artifact exceeds {max_bytes} byte cap")
+    return data
+
+
+def _atomic_write_bytes(dest: Path, data: bytes) -> None:
+    """Write ``data`` to a temp file next to ``dest``, then ``os.replace`` it.
+
+    Any failure deletes the temp file and leaves ``dest`` unchanged.
+    """
+    fd, tmp_name = tempfile.mkstemp(
+        dir=dest.parent,
+        prefix=f".{dest.name}.",
+        suffix=".part",
+    )
+    tmp_path = Path(tmp_name)
+    completed = False
+    try:
+        with os.fdopen(fd, "wb") as handle:
+            handle.write(data)
+        os.replace(tmp_path, dest)
+        completed = True
+    finally:
+        if not completed:
+            try:
+                os.unlink(tmp_path)
+            except OSError:
+                pass
+
+
 def fetch_file(
     model_id: str,
     fmt: str,
@@ -40,6 +87,8 @@ def fetch_file(
     ref: str = "main",
     root: Path | None = None,
     urlopen=None,
+    timeout: float = DEFAULT_FETCH_TIMEOUT,
+    max_bytes: int = MAX_FETCH_BYTES,
 ) -> dict:
     _match, rel = resolve(model_id, fmt)
     dest = Path(dest)
@@ -51,8 +100,9 @@ def fetch_file(
     url = model_url(rel, ref=ref)
     assert_fetch_url_allowed(url)
     opener = urlopen or urllib.request.urlopen
-    with opener(url) as resp:
+    with opener(url, timeout=timeout) as resp:
         final = resp.geturl() if hasattr(resp, "geturl") else url
         assert_fetch_url_allowed(final)
-        dest.write_bytes(resp.read())
+        payload = _read_bounded(resp, max_bytes)
+        _atomic_write_bytes(dest, payload)
     return {"id": model_id, "fmt": fmt, "path": str(dest), "source": "remote", "from": url}
