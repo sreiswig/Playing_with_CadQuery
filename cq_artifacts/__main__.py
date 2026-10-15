@@ -5,6 +5,7 @@ from __future__ import annotations
 import argparse
 import json
 import sys
+import urllib.error
 from pathlib import Path
 
 from .catalog import MODELS, REPO_ROOT, build_manifest, model_url, write_manifest
@@ -54,17 +55,38 @@ def _cmd_path(args: argparse.Namespace) -> int:
     return 0
 
 
+def _one_line_error(exc: BaseException) -> str:
+    text = " ".join(str(exc).split())
+    return text or exc.__class__.__name__
+
+
 def _cmd_fetch(args: argparse.Namespace) -> int:
-    from .fetch import fetch_file
+    from .fetch import DEFAULT_FETCH_TIMEOUT, FetchTooLargeError, fetch_file
 
     root = Path(args.root) if args.root else REPO_ROOT
     try:
-        result = fetch_file(args.id, args.fmt, Path(args.out), ref=args.ref, root=root)
+        result = fetch_file(
+            args.id,
+            args.fmt,
+            Path(args.out),
+            ref=args.ref,
+            root=root,
+            timeout=DEFAULT_FETCH_TIMEOUT,
+        )
     except KeyError as exc:
         print(str(exc), file=sys.stderr)
         return 1
     except ValueError as exc:
         print(str(exc), file=sys.stderr)
+        return 1
+    except (
+        urllib.error.HTTPError,
+        urllib.error.URLError,
+        TimeoutError,
+        OSError,
+        FetchTooLargeError,
+    ) as exc:
+        print(_one_line_error(exc), file=sys.stderr)
         return 1
     print(json.dumps(result, indent=2))
     return 0

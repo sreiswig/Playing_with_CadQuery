@@ -14,7 +14,14 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from cq_artifacts.catalog import MODELS, build_manifest, load_manifest, model_url
-from cq_artifacts.fetch import ALLOWED_RAW_PREFIX, assert_fetch_url_allowed, fetch_file
+from cq_artifacts.fetch import (
+    ALLOWED_RAW_PREFIX,
+    DEFAULT_FETCH_TIMEOUT,
+    MAX_FETCH_BYTES,
+    FetchTooLargeError,
+    assert_fetch_url_allowed,
+    fetch_file,
+)
 
 
 COMMITTED_FETCH_FILES = (
@@ -287,7 +294,7 @@ class ArtifactCatalogTests(unittest.TestCase):
             def __init__(self, url: str):
                 self._url = url
 
-            def read(self) -> bytes:
+            def read(self, size: int = -1) -> bytes:
                 return b"remote-bytes"
 
             def geturl(self) -> str:
@@ -299,7 +306,7 @@ class ArtifactCatalogTests(unittest.TestCase):
             def __exit__(self, *args):
                 return False
 
-        def fake_urlopen(url: str):
+        def fake_urlopen(url: str, timeout=None, **kw):
             seen.append(url)
             return FakeResp(url)
 
@@ -365,7 +372,7 @@ class ArtifactCatalogTests(unittest.TestCase):
 
     def test_fetch_rejects_redirect_off_prefix(self):
         class EvilResp:
-            def read(self) -> bytes:
+            def read(self, size: int = -1) -> bytes:
                 return b"stolen"
 
             def geturl(self) -> str:
@@ -377,7 +384,7 @@ class ArtifactCatalogTests(unittest.TestCase):
             def __exit__(self, *args):
                 return False
 
-        def evil_urlopen(url: str):
+        def evil_urlopen(url: str, timeout=None, **kw):
             return EvilResp()
 
         with tempfile.TemporaryDirectory() as tmp:
@@ -387,6 +394,173 @@ class ArtifactCatalogTests(unittest.TestCase):
             with self.assertRaises(ValueError):
                 fetch_file("cat", "step", dest, root=empty, urlopen=evil_urlopen)
             self.assertFalse(dest.exists())
+
+    def _remote_fetch(self, urlopen, dest: Path, **kwargs):
+        empty = dest.parent.parent / "empty-root"
+        empty.mkdir(exist_ok=True)
+        return fetch_file("cat", "step", dest, root=empty, urlopen=urlopen, **kwargs)
+
+    def test_fetch_passes_default_and_override_timeout(self):
+        seen = []
+
+        class FakeResp:
+            def read(self, size: int = -1) -> bytes:
+                return b"remote-bytes"
+
+            def geturl(self) -> str:
+                return (
+                    "https://raw.githubusercontent.com/sreiswig/Playing_with_CadQuery/main/cat.step"
+                )
+
+            def __enter__(self):
+                return self
+
+            def __exit__(self, *args):
+                return False
+
+        def fake_urlopen(url: str, timeout=None, **kw):
+            seen.append(timeout)
+            return FakeResp()
+
+        self.assertEqual(DEFAULT_FETCH_TIMEOUT, 30)
+        with tempfile.TemporaryDirectory() as tmp:
+            dest = Path(tmp) / "out" / "cat.step"
+            self._remote_fetch(fake_urlopen, dest)
+            override = Path(tmp) / "out" / "override.step"
+            self._remote_fetch(fake_urlopen, override, timeout=5)
+        self.assertEqual(seen, [DEFAULT_FETCH_TIMEOUT, 5])
+
+    def test_fetch_oversize_raises_and_leaves_no_files(self):
+        self.assertEqual(MAX_FETCH_BYTES, 32 * 1024 * 1024)
+
+        class BigResp:
+            def read(self, size: int = -1) -> bytes:
+                return b"x" * 64
+
+            def geturl(self) -> str:
+                return (
+                    "https://raw.githubusercontent.com/sreiswig/Playing_with_CadQuery/main/cat.step"
+                )
+
+            def __enter__(self):
+                return self
+
+            def __exit__(self, *args):
+                return False
+
+        def big_urlopen(url: str, timeout=None, **kw):
+            return BigResp()
+
+        with tempfile.TemporaryDirectory() as tmp:
+            dest = Path(tmp) / "out" / "cat.step"
+            with self.assertRaises(FetchTooLargeError) as caught:
+                self._remote_fetch(big_urlopen, dest, max_bytes=32)
+            self.assertIn("32", str(caught.exception))
+            self.assertFalse(dest.exists())
+            self.assertEqual(list(dest.parent.iterdir()), [])
+
+    def test_fetch_remote_replace_failure_leaves_no_temp_or_dest(self):
+        from unittest.mock import patch
+
+        class FakeResp:
+            def read(self, size: int = -1) -> bytes:
+                return b"remote-bytes"
+
+            def geturl(self) -> str:
+                return (
+                    "https://raw.githubusercontent.com/sreiswig/Playing_with_CadQuery/main/cat.step"
+                )
+
+            def __enter__(self):
+                return self
+
+            def __exit__(self, *args):
+                return False
+
+        def fake_urlopen(url: str, timeout=None, **kw):
+            return FakeResp()
+
+        with tempfile.TemporaryDirectory() as tmp:
+            dest = Path(tmp) / "out" / "cat.step"
+            with patch("cq_artifacts.fetch.os.replace", side_effect=OSError("disk full")):
+                with self.assertRaises(OSError):
+                    self._remote_fetch(fake_urlopen, dest)
+            self.assertFalse(dest.exists())
+            self.assertEqual(list(dest.parent.iterdir()), [])
+
+    def _run_fetch_cli(self, urlopen):
+        import io
+        from contextlib import redirect_stderr, redirect_stdout
+        from unittest.mock import patch
+
+        from cq_artifacts.__main__ import main
+
+        with tempfile.TemporaryDirectory() as tmp:
+            empty = Path(tmp) / "empty"
+            empty.mkdir()
+            dest = Path(tmp) / "out.step"
+            stdout = io.StringIO()
+            stderr = io.StringIO()
+            with (
+                patch("urllib.request.urlopen", urlopen),
+                redirect_stdout(stdout),
+                redirect_stderr(stderr),
+            ):
+                code = main(
+                    ["fetch", "cat", "step", "-o", str(dest), "--root", str(empty)]
+                )
+            return code, stdout.getvalue(), stderr.getvalue(), dest.exists()
+
+    def test_cli_fetch_urlerror_exits_1(self):
+        import urllib.error
+
+        def boom(url: str, timeout=None, **kw):
+            raise urllib.error.URLError("network down")
+
+        code, stdout, stderr, dest_exists = self._run_fetch_cli(boom)
+        self.assertEqual(code, 1)
+        self.assertEqual(stdout, "")
+        self.assertEqual(stderr.splitlines(), ["<urlopen error network down>"])
+        self.assertFalse(dest_exists)
+
+    def test_cli_fetch_timeout_exits_1(self):
+        def boom(url: str, timeout=None, **kw):
+            raise TimeoutError("timed out")
+
+        code, stdout, stderr, dest_exists = self._run_fetch_cli(boom)
+        self.assertEqual(code, 1)
+        self.assertEqual(stdout, "")
+        self.assertEqual(stderr.splitlines(), ["timed out"])
+        self.assertFalse(dest_exists)
+
+    def test_cli_fetch_oversize_exits_1(self):
+        class BigResp:
+            def read(self, size: int = -1) -> bytes:
+                n = MAX_FETCH_BYTES + 1 if size is None or size < 0 else size
+                return b"x" * n
+
+            def geturl(self) -> str:
+                return (
+                    "https://raw.githubusercontent.com/sreiswig/Playing_with_CadQuery/main/cat.step"
+                )
+
+            def __enter__(self):
+                return self
+
+            def __exit__(self, *args):
+                return False
+
+        def big_urlopen(url: str, timeout=None, **kw):
+            return BigResp()
+
+        code, stdout, stderr, dest_exists = self._run_fetch_cli(big_urlopen)
+        self.assertEqual(code, 1)
+        self.assertEqual(stdout, "")
+        self.assertEqual(
+            stderr.splitlines(),
+            [f"remote artifact exceeds {MAX_FETCH_BYTES} byte cap"],
+        )
+        self.assertFalse(dest_exists)
 
 
 if __name__ == "__main__":
