@@ -5,12 +5,21 @@ on:
     branches: [main]
   pull_request:
 
+# One run per PR (or ref); a newer PR push cancels the stale PR run.
+# Pushes to main are never cancelled.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
 permissions:
   contents: read
 
 jobs:
   test:
     runs-on: ubuntu-24.04
+    # Caps hung steps once a runner picks the job up (observed ~10 s).
+    # Does NOT bound time spent queued waiting for a runner.
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
@@ -22,6 +31,9 @@ jobs:
   install-requirements:
     # Installs requirements.txt so Dependabot pip bumps are exercised in CI.
     runs-on: ubuntu-24.04
+    # Caps hung steps once a runner picks the job up (observed ~1 min).
+    # Does NOT bound time spent queued waiting for a runner.
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
