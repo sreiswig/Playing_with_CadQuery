@@ -47,3 +47,5 @@ jobs:
           pip install -r requirements.txt
       - name: Import CadQuery
         run: python -c "import cadquery; print('cadquery', cadquery.__version__)"
+      - name: Build smoke tests
+        run: python -m unittest -v tests.test_build_smoke

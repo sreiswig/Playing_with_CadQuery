@@ -23,7 +23,7 @@ def _cmd_export(args: argparse.Namespace) -> int:
 
     root = Path(args.root) if args.root else REPO_ROOT
     if args.id:
-        written = {args.id: export_model(args.id, root=root)}
+        written = {args.id: export_model(args.id, root=root).files}
         write_manifest(root)
     else:
         written = export_all(root=root)
