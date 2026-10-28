@@ -1,0 +1,182 @@
+{
+  "version": 1,
+  "units": "mm",
+  "regen": "python -m tests.regen_drift_baseline",
+  "tolerances": {
+    "volume_relative": 0.01,
+    "bbox_abs_mm": 0.01,
+    "bbox_relative": 0.005,
+    "stl_triangles_relative": 0.1
+  },
+  "manifest_header": {
+    "version": 1,
+    "units": "mm",
+    "raw_base": "https://raw.githubusercontent.com/sreiswig/Playing_with_CadQuery/main/"
+  },
+  "models": [
+    {
+      "id": "cat",
+      "catalog": {
+        "id": "cat",
+        "source": "cat_model.py",
+        "builder": "cat_model:create_cat",
+        "units": "mm",
+        "description": "Vibe-coded cat (body, head, ears, legs, tail).",
+        "files": {
+          "step": "cat.step",
+          "stl": "artifacts/cat/cat.stl"
+        }
+      },
+      "manifest": {
+        "id": "cat",
+        "source": "cat_model.py",
+        "builder": "cat_model:create_cat",
+        "units": "mm",
+        "description": "Vibe-coded cat (body, head, ears, legs, tail).",
+        "files": {
+          "step": {
+            "path": "cat.step",
+            "url": "https://raw.githubusercontent.com/sreiswig/Playing_with_CadQuery/main/cat.step"
+          },
+          "stl": {
+            "path": "artifacts/cat/cat.stl",
+            "url": "https://raw.githubusercontent.com/sreiswig/Playing_with_CadQuery/main/artifacts/cat/cat.stl"
+          }
+        }
+      },
+      "volume_mm3": 3910.746433,
+      "bbox_mm": {
+        "xlen": 30.516848,
+        "ylen": 17.707816,
+        "zlen": 31.118901
+      },
+      "solid_count": 2,
+      "stl_triangles": 12514,
+      "stl_triangles_min": 11262,
+      "stl_triangles_max": 13766
+    },
+    {
+      "id": "drone",
+      "catalog": {
+        "id": "drone",
+        "source": "drone.py",
+        "builder": "drone:create_drone",
+        "units": "mm",
+        "description": "Quadcopter: body, four arms, motors, simple props.",
+        "files": {
+          "step": "drone.step",
+          "stl": "artifacts/drone/drone.stl"
+        }
+      },
+      "manifest": {
+        "id": "drone",
+        "source": "drone.py",
+        "builder": "drone:create_drone",
+        "units": "mm",
+        "description": "Quadcopter: body, four arms, motors, simple props.",
+        "files": {
+          "step": {
+            "path": "drone.step",
+            "url": "https://raw.githubusercontent.com/sreiswig/Playing_with_CadQuery/main/drone.step"
+          },
+          "stl": {
+            "path": "artifacts/drone/drone.stl",
+            "url": "https://raw.githubusercontent.com/sreiswig/Playing_with_CadQuery/main/artifacts/drone/drone.stl"
+          }
+        }
+      },
+      "volume_mm3": 24734.273883,
+      "bbox_mm": {
+        "xlen": 166.183766,
+        "ylen": 166.183766,
+        "zlen": 18.513288
+      },
+      "solid_count": 1,
+      "stl_triangles": 3034,
+      "stl_triangles_min": 2730,
+      "stl_triangles_max": 3338
+    },
+    {
+      "id": "sonic",
+      "catalog": {
+        "id": "sonic",
+        "source": "sonic.py",
+        "builder": "sonic:create_sonic",
+        "units": "mm",
+        "description": "Stylized chibi hedgehog (quills, muzzle, gloves, oversized shoes). Original geometry.",
+        "files": {
+          "step": "sonic.step",
+          "stl": "artifacts/sonic/sonic.stl"
+        }
+      },
+      "manifest": {
+        "id": "sonic",
+        "source": "sonic.py",
+        "builder": "sonic:create_sonic",
+        "units": "mm",
+        "description": "Stylized chibi hedgehog (quills, muzzle, gloves, oversized shoes). Original geometry.",
+        "files": {
+          "step": {
+            "path": "sonic.step",
+            "url": "https://raw.githubusercontent.com/sreiswig/Playing_with_CadQuery/main/sonic.step"
+          },
+          "stl": {
+            "path": "artifacts/sonic/sonic.stl",
+            "url": "https://raw.githubusercontent.com/sreiswig/Playing_with_CadQuery/main/artifacts/sonic/sonic.stl"
+          }
+        }
+      },
+      "volume_mm3": 11778.511025,
+      "bbox_mm": {
+        "xlen": 35.854675,
+        "ylen": 35.290708,
+        "zlen": 42.063076
+      },
+      "solid_count": 1,
+      "stl_triangles": 29646,
+      "stl_triangles_min": 26681,
+      "stl_triangles_max": 32611
+    },
+    {
+      "id": "box",
+      "catalog": {
+        "id": "box",
+        "source": "box.py",
+        "builder": "box:create_box",
+        "units": "mm",
+        "description": "Parametric rectangular prism (CadQuery box). Defaults 10×10×10 mm.",
+        "files": {
+          "step": "box.step",
+          "stl": "artifacts/box/box.stl"
+        }
+      },
+      "manifest": {
+        "id": "box",
+        "source": "box.py",
+        "builder": "box:create_box",
+        "units": "mm",
+        "description": "Parametric rectangular prism (CadQuery box). Defaults 10×10×10 mm.",
+        "files": {
+          "step": {
+            "path": "box.step",
+            "url": "https://raw.githubusercontent.com/sreiswig/Playing_with_CadQuery/main/box.step"
+          },
+          "stl": {
+            "path": "artifacts/box/box.stl",
+            "url": "https://raw.githubusercontent.com/sreiswig/Playing_with_CadQuery/main/artifacts/box/box.stl"
+          }
+        }
+      },
+      "volume_mm3": 1000.0,
+      "bbox_mm": {
+        "xlen": 10.0,
+        "ylen": 10.0,
+        "zlen": 10.0
+      },
+      "solid_count": 1,
+      "stl_triangles": 12,
+      "stl_triangles_min": 10,
+      "stl_triangles_max": 14
+    }
+  ]
+}
