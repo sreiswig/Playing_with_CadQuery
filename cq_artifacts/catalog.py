@@ -57,6 +57,34 @@ MODELS: list[dict[str, Any]] = [
             "stl": "artifacts/box/box.stl",
         },
     },
+    {
+        "id": "through-hole",
+        "source": "through_hole.py",
+        "builder": "through_hole:create_through_hole",
+        "units": "mm",
+        "description": (
+            "Plate with an ISO 273 medium-series M3 clearance hole (3.4 mm). "
+            "Defaults 20×20×3 mm, hole centred."
+        ),
+        "files": {
+            "step": "through-hole.step",
+            "stl": "artifacts/through-hole/through-hole.stl",
+        },
+    },
+    {
+        "id": "m3-shcs",
+        "source": "m3_shcs.py",
+        "builder": "m3_shcs:create_m3_shcs",
+        "units": "mm",
+        "description": (
+            "ISO 4762 M3 socket head cap screw envelope (no thread helix). "
+            "Default length 10 mm (ISO 888)."
+        ),
+        "files": {
+            "step": "m3-shcs.step",
+            "stl": "artifacts/m3-shcs/m3-shcs.stl",
+        },
+    },
 ]
 
 

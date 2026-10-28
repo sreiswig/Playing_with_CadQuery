@@ -1,8 +1,8 @@
 # Playing_with_CadQuery
 
 Small CadQuery playground (Nix devenv). Models: a cat, a quadcopter, a
-stylized Sonic-like hedgehog (original geometry), and a parametric **box**
-(first mechanical catalog part).
+stylized Sonic-like hedgehog (original geometry), a parametric **box**,
+an M3 **through-hole** plate, and an **m3-shcs** socket-head envelope.
 
 Mechanical roadmap (ranked list v0.1): [`docs/MECH_CATALOG.md`](docs/MECH_CATALOG.md).
 
@@ -16,5 +16,6 @@ python -m cq_artifacts list
 python -m cq_artifacts export
 ```
 
-Humans: `cat_model.py`, `drone.py`, `sonic.py`, and `box.py` are the builders.
+Humans: `cat_model.py`, `drone.py`, `sonic.py`, `box.py`, `through_hole.py`,
+and `m3_shcs.py` are the builders.
 Open the `.step` files in FreeCAD or CQ-Editor.
