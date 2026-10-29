@@ -50,6 +50,7 @@ def _defaults(**overrides):
 class ThroughHoleDimsTests(unittest.TestCase):
     def test_default_is_iso_273_medium_m3(self):
         self.assertEqual(DEFAULT_HOLE_DIAMETER_MM, 3.4)
+        # 20×20×3 mm is a demo plate, not a size from a standard.
         self.assertEqual(
             (
                 DEFAULT_PLATE_LENGTH_MM,

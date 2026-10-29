@@ -8,9 +8,10 @@ Cited limits, not a product drawing beyond them:
 - ISO 262: M3×0.5 coarse pitch. The shank diameter is the nominal major
   diameter, 3.0 mm. The pitch is not a modeled helix.
 - ISO 888:2012 Table 1: nominal length is the under-head length for a
-  screw whose bearing face is perpendicular to the axis. Only unbracketed
-  (preferred) lengths are accepted. Bracketed lengths are the ones
-  ISO 888 says to avoid where possible.
+  screw whose bearing face is perpendicular to the axis. Accepted lengths
+  are the unbracketed (preferred) values from 5 mm through 30 mm:
+  5, 6, 8, 10, 12, 16, 20, 25, 30. Bracketed lengths, and preferred
+  lengths outside that range, are rejected.
 
 Not an ISO 4017 hexagon-head bolt.
 """
@@ -31,11 +32,8 @@ SOCKET_DEPTH_MM = 1.3
 SHANK_DIAMETER_MM = 3.0
 THREAD_PITCH_MM = 0.5
 
-# ISO 888:2012 Table 1, nominal lengths that are not in parentheses.
+# ISO 888:2012 Table 1 unbracketed (preferred) lengths from 5 mm through 30 mm.
 PREFERRED_LENGTHS_MM: tuple[int, ...] = (
-    2,
-    3,
-    4,
     5,
     6,
     8,
@@ -45,40 +43,6 @@ PREFERRED_LENGTHS_MM: tuple[int, ...] = (
     20,
     25,
     30,
-    35,
-    40,
-    45,
-    50,
-    55,
-    60,
-    65,
-    70,
-    80,
-    90,
-    100,
-    110,
-    120,
-    130,
-    140,
-    150,
-    160,
-    180,
-    200,
-    220,
-    240,
-    260,
-    280,
-    300,
-    320,
-    340,
-    360,
-    380,
-    400,
-    420,
-    440,
-    460,
-    480,
-    500,
 )
 
 # ISO 888:2012 Table 1 lengths in parentheses.
@@ -155,7 +119,7 @@ def volume_mm3(spec: M3Shcs) -> float:
 
 
 def make_m3_shcs(length: object) -> Result[M3Shcs, M3ShcsDeny]:
-    """Accept one ISO 888:2012 preferred nominal length, in millimetres."""
+    """Accept one ISO 888:2012 preferred length from 5 mm through 30 mm."""
     if isinstance(length, bool) or not isinstance(length, (int, float)):
         return Err(M3ShcsDeny(M3ShcsDenyCode.NOT_A_NUMBER, "length", length))
     number = float(length)

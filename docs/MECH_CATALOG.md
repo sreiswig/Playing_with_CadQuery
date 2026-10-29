@@ -19,8 +19,8 @@ Ranked roadmap of parametric FDM+CadQuery parts for this repo. **box**, **throug
 |---|----|------|----|--------|---------------|
 | 1 | box | box | 1 | L,W,H | CadQuery primitive (landed this PR) |
 | 2 | cylinder | cylinder | 1 | d,h | shaft/boss stock |
-| 3 | through-hole | through hole | 1 | d, L, W, t, hole position | ISO 273 medium (M3=3.4 mm) |
-| 4 | m3-shcs | M3 SHCS | 1 | length ISO 888 | ISO 4762 envelope dk max 5.5 / k max 3.0 / s 2.5; M3×0.5 ISO 262; not ISO 4017 |
+| 3 | through-hole | through hole | 1 | d, L, W, t, hole position | ISO 273 medium (M3=3.4 mm). Demo plate 20×20×3 mm is not from a standard |
+| 4 | m3-shcs | M3 SHCS | 1 | length ISO 888, 5–30 | ISO 4762 envelope dk max 5.5 / k max 3.0 / s 2.5; M3×0.5 ISO 262; preferred lengths 5, 6, 8, 10, 12, 16, 20, 25, 30; not ISO 4017 |
 | 5 | m3-nut | M3 hex nut | 1 | style 1 | ISO 4032 |
 | 6 | m3-washer | M3 washer | 1 | series | ISO 7089 normal |
 | 7 | counterbore | SHCS counterbore | 2 | thread,t | ISO 4762 head envelope + ISO 273 hole; DIN 974-1 only for shop CB |

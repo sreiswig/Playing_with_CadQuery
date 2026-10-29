@@ -64,7 +64,7 @@ MODELS: list[dict[str, Any]] = [
         "units": "mm",
         "description": (
             "Plate with an ISO 273 medium-series M3 clearance hole (3.4 mm). "
-            "Defaults 20×20×3 mm, hole centred."
+            "Demo plate 20×20×3 mm (not from a standard), hole centred."
         ),
         "files": {
             "step": "through-hole.step",
@@ -78,7 +78,7 @@ MODELS: list[dict[str, Any]] = [
         "units": "mm",
         "description": (
             "ISO 4762 M3 socket head cap screw envelope (no thread helix). "
-            "Default length 10 mm (ISO 888)."
+            "Default length 10 mm. ISO 888 preferred lengths 5–30 mm."
         ),
         "files": {
             "step": "m3-shcs.step",

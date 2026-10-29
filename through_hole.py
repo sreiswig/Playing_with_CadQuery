@@ -22,7 +22,8 @@ def create_through_hole(
     """Plate with one cylindrical through hole. Units: millimetres.
 
     The default diameter is 3.4 mm, the ISO 273:1979 medium-series
-    clearance hole for an M3 screw. ``length``, ``width``, and
+    clearance hole for an M3 screw. The default plate is 20×20×3 mm,
+    a demo size that is not from a standard. ``length``, ``width``, and
     ``thickness`` are the plate extents (X, Y, Z). ``hole_x`` and
     ``hole_y`` place the hole axis relative to the plate centre. The
     hole is parallel to the thickness and must lie strictly inside the

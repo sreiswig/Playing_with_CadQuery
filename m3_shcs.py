@@ -5,7 +5,9 @@ from cq_artifacts.m3_shcs_dims import (
 )
 from cq_artifacts.outcome import Err
 
-# Past the head face only. The resulting pocket depth stays t min.
+# 0.05 mm past the head face so the cutter is not coincident with it.
+# This overshoot is a CAD-only modeling detail, not an ISO dimension.
+# The pocket depth inside the head stays t min.
 _SOCKET_CUTTER_OVERSHOOT_MM = 0.05
 
 
@@ -22,7 +24,8 @@ def create_m3_shcs(length: float = DEFAULT_LENGTH_MM):
       3.0. The pitch is not swept into a helix.
     - ISO 888:2012 nominal length is the under-head length for a screw
       with a flat bearing face perpendicular to the axis. ``length`` must
-      be an unbracketed preferred value from ISO 888:2012 Table 1.
+      be an unbracketed preferred value from ISO 888:2012 Table 1 in the
+      range 5 mm through 30 mm: 5, 6, 8, 10, 12, 16, 20, 25, 30.
       Default 10.
 
     The bearing face is z = 0. The head occupies +Z and the shank occupies

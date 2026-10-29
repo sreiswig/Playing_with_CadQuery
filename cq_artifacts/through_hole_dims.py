@@ -1,9 +1,10 @@
 """Pure millimetre spec for a plate with one through hole. No CadQuery.
 
 The default hole is the ISO 273:1979 medium-series clearance hole for an
-M3 screw, 3.4 mm. Plate length, width, thickness, and hole position are
-free parameters. The hole axis is parallel to the thickness and must lie
-strictly inside the plate outline.
+M3 screw, 3.4 mm. The default plate, 20×20×3 mm, is a demo size and is
+not from a standard. Plate length, width, thickness, and hole position
+are free parameters. The hole axis is parallel to the thickness and must
+lie strictly inside the plate outline.
 """
 
 from __future__ import annotations
@@ -17,6 +18,7 @@ from .outcome import Err, Ok, Result
 
 # ISO 273:1979 medium series, M3.
 DEFAULT_HOLE_DIAMETER_MM = 3.4
+# Demo plate for the committed solid. Not taken from a standard.
 DEFAULT_PLATE_LENGTH_MM = 20.0
 DEFAULT_PLATE_WIDTH_MM = 20.0
 DEFAULT_PLATE_THICKNESS_MM = 3.0

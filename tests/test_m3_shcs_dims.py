@@ -66,16 +66,12 @@ class M3ShcsDimsTests(unittest.TestCase):
         with self.assertRaises(AttributeError):
             setattr(spec, "length_mm", 12)
 
-    def test_preferred_lengths_are_the_unbracketed_iso_888_table(self):
+    def test_allowed_lengths_are_iso_888_preferred_from_5_to_30(self):
         self.assertEqual(
             PREFERRED_LENGTHS_MM,
-            (
-                2, 3, 4, 5, 6, 8, 10, 12, 16, 20, 25, 30, 35, 40, 45, 50,
-                55, 60, 65, 70, 80, 90, 100, 110, 120, 130, 140, 150, 160,
-                180, 200, 220, 240, 260, 280, 300, 320, 340, 360, 380, 400,
-                420, 440, 460, 480, 500,
-            ),
+            (5, 6, 8, 10, 12, 16, 20, 25, 30),
         )
+        self.assertEqual(DEFAULT_LENGTH_MM, 10)
         self.assertEqual(
             NON_PREFERRED_LENGTHS_MM,
             (
@@ -107,8 +103,13 @@ class M3ShcsDimsTests(unittest.TestCase):
             (float("-inf"), M3ShcsDenyCode.NON_FINITE),
             (0, M3ShcsDenyCode.NON_POSITIVE),
             (-10, M3ShcsDenyCode.NON_POSITIVE),
+            (2, M3ShcsDenyCode.NOT_PREFERRED_LENGTH),
+            (4, M3ShcsDenyCode.NOT_PREFERRED_LENGTH),
             (14, M3ShcsDenyCode.NOT_PREFERRED_LENGTH),
             (10.5, M3ShcsDenyCode.NOT_PREFERRED_LENGTH),
+            (35, M3ShcsDenyCode.NOT_PREFERRED_LENGTH),
+            (40, M3ShcsDenyCode.NOT_PREFERRED_LENGTH),
+            (500, M3ShcsDenyCode.NOT_PREFERRED_LENGTH),
             (1000, M3ShcsDenyCode.NOT_PREFERRED_LENGTH),
         )
         for value, code in cases:
