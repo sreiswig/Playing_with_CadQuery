@@ -29,10 +29,14 @@ COMMITTED_FETCH_FILES = (
     "drone.step",
     "sonic.step",
     "box.step",
+    "through-hole.step",
+    "m3-shcs.step",
     "artifacts/cat/cat.stl",
     "artifacts/drone/drone.stl",
     "artifacts/sonic/sonic.stl",
     "artifacts/box/box.stl",
+    "artifacts/through-hole/through-hole.stl",
+    "artifacts/m3-shcs/m3-shcs.stl",
 )
 
 
@@ -69,9 +73,13 @@ class ArtifactCatalogTests(unittest.TestCase):
         data = json.loads(proc.stdout)
         self.assertEqual(data["version"], 1)
         ids = {m["id"] for m in data["models"]}
-        self.assertGreaterEqual(ids, {"cat", "drone", "sonic", "box"})
+        self.assertGreaterEqual(
+            ids, {"cat", "drone", "sonic", "box", "through-hole", "m3-shcs"}
+        )
         self.assertIn("sonic", ids)
         self.assertIn("box", ids)
+        self.assertIn("through-hole", ids)
+        self.assertIn("m3-shcs", ids)
 
     def test_cli_url_and_path_cat_step(self):
         url = subprocess.run(
@@ -281,6 +289,79 @@ class ArtifactCatalogTests(unittest.TestCase):
             self.assertEqual(data["source"], "local")
             self.assertEqual(dest.read_bytes(), (ROOT / "box.step").read_bytes())
 
+    def test_cli_url_path_and_fetch_through_hole(self):
+        self._assert_cli_step_and_stl("through-hole")
+
+    def test_cli_url_path_and_fetch_m3_shcs(self):
+        self._assert_cli_step_and_stl("m3-shcs")
+
+    def _assert_cli_step_and_stl(self, model_id: str) -> None:
+        url = subprocess.run(
+            [sys.executable, "-m", "cq_artifacts", "url", model_id, "step"],
+            cwd=ROOT,
+            check=True,
+            capture_output=True,
+            text=True,
+        ).stdout.strip()
+        self.assertTrue(url.endswith(f"/{model_id}.step"))
+        self.assertTrue(
+            url.startswith(
+                "https://raw.githubusercontent.com/sreiswig/Playing_with_CadQuery/"
+            )
+        )
+        path = subprocess.run(
+            [sys.executable, "-m", "cq_artifacts", "path", model_id, "step"],
+            cwd=ROOT,
+            check=True,
+            capture_output=True,
+            text=True,
+        ).stdout.strip()
+        self.assertTrue(path.endswith(f"{model_id}.step"))
+        stl_url = subprocess.run(
+            [sys.executable, "-m", "cq_artifacts", "url", model_id, "stl"],
+            cwd=ROOT,
+            check=True,
+            capture_output=True,
+            text=True,
+        ).stdout.strip()
+        self.assertTrue(stl_url.endswith(f"/artifacts/{model_id}/{model_id}.stl"))
+        self.assertTrue(
+            stl_url.startswith(
+                "https://raw.githubusercontent.com/sreiswig/Playing_with_CadQuery/"
+            )
+        )
+        stl_path = subprocess.run(
+            [sys.executable, "-m", "cq_artifacts", "path", model_id, "stl"],
+            cwd=ROOT,
+            check=True,
+            capture_output=True,
+            text=True,
+        ).stdout.strip()
+        self.assertTrue(stl_path.endswith(f"artifacts/{model_id}/{model_id}.stl"))
+        with tempfile.TemporaryDirectory() as tmp:
+            dest = Path(tmp) / "copied.step"
+            proc = subprocess.run(
+                [
+                    sys.executable,
+                    "-m",
+                    "cq_artifacts",
+                    "fetch",
+                    model_id,
+                    "step",
+                    "-o",
+                    str(dest),
+                    "--root",
+                    str(ROOT),
+                ],
+                cwd=ROOT,
+                check=True,
+                capture_output=True,
+                text=True,
+            )
+            data = json.loads(proc.stdout)
+            self.assertEqual(data["source"], "local")
+            self.assertEqual(dest.read_bytes(), (ROOT / f"{model_id}.step").read_bytes())
+
     def test_fetch_unknown_model(self):
         from cq_artifacts.fetch import fetch_file
 
@@ -342,6 +423,18 @@ class ArtifactCatalogTests(unittest.TestCase):
         )
         assert_fetch_url_allowed(
             "https://raw.githubusercontent.com/sreiswig/Playing_with_CadQuery/main/artifacts/box/box.stl"
+        )
+        assert_fetch_url_allowed(
+            "https://raw.githubusercontent.com/sreiswig/Playing_with_CadQuery/main/through-hole.step"
+        )
+        assert_fetch_url_allowed(
+            "https://raw.githubusercontent.com/sreiswig/Playing_with_CadQuery/main/m3-shcs.step"
+        )
+        assert_fetch_url_allowed(
+            "https://raw.githubusercontent.com/sreiswig/Playing_with_CadQuery/main/artifacts/through-hole/through-hole.stl"
+        )
+        assert_fetch_url_allowed(
+            "https://raw.githubusercontent.com/sreiswig/Playing_with_CadQuery/main/artifacts/m3-shcs/m3-shcs.stl"
         )
 
     def test_allowlist_rejects_other_hosts(self):

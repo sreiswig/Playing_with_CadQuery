@@ -100,6 +100,14 @@ class CatalogLookupTests(unittest.TestCase):
             "drone": {"step": "drone.step", "stl": "artifacts/drone/drone.stl"},
             "sonic": {"step": "sonic.step", "stl": "artifacts/sonic/sonic.stl"},
             "box": {"step": "box.step", "stl": "artifacts/box/box.stl"},
+            "through-hole": {
+                "step": "through-hole.step",
+                "stl": "artifacts/through-hole/through-hole.stl",
+            },
+            "m3-shcs": {
+                "step": "m3-shcs.step",
+                "stl": "artifacts/m3-shcs/m3-shcs.stl",
+            },
         }
         self.assertEqual([row["id"] for row in MODELS], list(expected))
         for model_id, files in expected.items():

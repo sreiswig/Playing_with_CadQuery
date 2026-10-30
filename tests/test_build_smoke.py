@@ -30,7 +30,7 @@ _STL_HEADER_BYTES = 80
 _STL_COUNT_BYTES = 4
 _STL_TRIANGLE_BYTES = 50
 _STEP_MAGIC = b"ISO-10303-21"
-_REQUIRED_MODELS = ("cat", "drone", "sonic", "box")
+_REQUIRED_MODELS = ("cat", "drone", "sonic", "box", "through-hole", "m3-shcs")
 
 
 def _binary_stl_triangle_count(data: bytes) -> int | None:
@@ -172,6 +172,102 @@ class BuildSmokeTests(unittest.TestCase):
                 f"{model_id}: volume_mm3={volume!r} triangles={triangles}",
                 flush=True,
             )
+
+    def test_through_hole_and_m3_shcs_match_cited_envelope(self):
+        import math
+
+        from cq_artifacts.m3_shcs_dims import make_m3_shcs
+        from cq_artifacts.m3_shcs_dims import volume_mm3 as screw_volume
+        from cq_artifacts.outcome import Ok
+        from cq_artifacts.through_hole_dims import make_through_hole
+        from cq_artifacts.through_hole_dims import volume_mm3 as plate_volume
+        from m3_shcs import create_m3_shcs
+        from through_hole import create_through_hole
+
+        plate_spec = make_through_hole(3.4, 20, 20, 3, 0, 0)
+        self.assertIsInstance(plate_spec, Ok)
+        plate = self._shape(create_through_hole())
+        self._assert_envelope(
+            plate,
+            plate_volume(plate_spec.value),
+            (20.0, 20.0, 3.0),
+        )
+        self.assertAlmostEqual(plate.Center().x, 0.0, places=6)
+        self.assertAlmostEqual(plate.Center().y, 0.0, places=6)
+        self.assertFalse(plate.isInside((0, 0, 0)))
+        self.assertTrue(plate.isInside((8, 0, 0)))
+
+        offset_spec = make_through_hole(3.4, 20, 20, 3, 5, -2)
+        self.assertIsInstance(offset_spec, Ok)
+        offset = self._shape(create_through_hole(hole_x=5, hole_y=-2))
+        self._assert_envelope(
+            offset,
+            plate_volume(offset_spec.value),
+            (20.0, 20.0, 3.0),
+        )
+        hole_mass = math.pi * (1.7 ** 2) * 3.0
+        total = 20.0 * 20.0 * 3.0 - hole_mass
+        self.assertAlmostEqual(offset.Center().x, -5.0 * hole_mass / total, places=6)
+        self.assertAlmostEqual(offset.Center().y, 2.0 * hole_mass / total, places=6)
+        self.assertFalse(offset.isInside((5, -2, 0)))
+        self.assertTrue(offset.isInside((0, 0, 0)))
+
+        screw_spec = make_m3_shcs(10)
+        self.assertIsInstance(screw_spec, Ok)
+        screw = self._shape(create_m3_shcs())
+        self._assert_envelope(
+            screw,
+            screw_volume(screw_spec.value),
+            (5.5, 5.5, 13.0),
+        )
+        socket_z = 3.0 - 1.3 / 2.0
+        self.assertFalse(screw.isInside((0, 0, socket_z)))
+        # Circumscribed hex: flat midpoint on +X, vertex on +Y.
+        self.assertTrue(screw.isInside((1.35, 0, socket_z)))
+        self.assertFalse(screw.isInside((0, 1.40, socket_z)))
+        self.assertTrue(screw.isInside((0, 0, 1.5)))
+        self.assertTrue(screw.isInside((1.45, 0, -2)))
+        self.assertFalse(screw.isInside((1.55, 0, -2)))
+        for angle in range(0, 360, 45):
+            radius = 1.45
+            point = (
+                radius * math.cos(math.radians(angle)),
+                radius * math.sin(math.radians(angle)),
+                -3.0,
+            )
+            self.assertTrue(screw.isInside(point), point)
+        self.assertAlmostEqual(screw.Center().x, 0.0, places=6)
+        self.assertAlmostEqual(screw.Center().y, 0.0, places=6)
+        self.assertLess(screw.Center().z, 0.0)
+
+        longer_spec = make_m3_shcs(16)
+        self.assertIsInstance(longer_spec, Ok)
+        longer = self._shape(create_m3_shcs(length=16))
+        self._assert_envelope(
+            longer,
+            screw_volume(longer_spec.value),
+            (5.5, 5.5, 19.0),
+        )
+
+    def _shape(self, workplane):
+        import cadquery as cq
+
+        shape = workplane.val() if isinstance(workplane, cq.Workplane) else workplane
+        self.assertTrue(shape.isValid())
+        self.assertEqual(len(shape.Solids()), 1)
+        return shape
+
+    def _assert_envelope(self, shape, expected_volume: float, bbox: tuple[float, float, float]) -> None:
+        actual = float(shape.Volume())
+        relative = abs(actual - expected_volume) / expected_volume
+        self.assertLessEqual(
+            relative,
+            1e-6,
+            f"Volume() {actual} vs cited envelope {expected_volume}",
+        )
+        bounds = shape.BoundingBox()
+        for axis, expected in zip(("xlen", "ylen", "zlen"), bbox, strict=True):
+            self.assertAlmostEqual(float(getattr(bounds, axis)), expected, places=6)
 
 
 if __name__ == "__main__":
