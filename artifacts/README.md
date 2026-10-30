@@ -3,6 +3,7 @@
 `manifest.json` is the machine-readable index (ids, formats, paths, raw GitHub URLs).
 
 STEP files currently live at the repo root (`cat.step`, `drone.step`, `sonic.step`,
-`box.step`, `through-hole.step`, `m3-shcs.step`) so existing links keep working.
+`box.step`, `through-hole.step`, `m3-shcs.step`, `headset-earcup.step`,
+`headset-headband.step`, `headset-yoke.step`, `headset.step`) so existing links keep working.
 STL lands under `artifacts/<id>/` when
 you run `python -m cq_artifacts export`.

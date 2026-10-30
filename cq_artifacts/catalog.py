@@ -85,6 +85,63 @@ MODELS: list[dict[str, Any]] = [
             "stl": "artifacts/m3-shcs/m3-shcs.stl",
         },
     },
+    {
+        "id": "headset-earcup",
+        "source": "headset.py",
+        "builder": "headset:create_headset_earcup",
+        "units": "mm",
+        "description": (
+            "Circumaural earcup shell and back cover. Default seat fits a "
+            "50 mm dynamic driver (40–50 mm), with a pad lip, PCB and LiPo bay, "
+            "mic-boom port, and flex pass-through. Cover holes are 3.4 mm."
+        ),
+        "files": {
+            "step": "headset-earcup.step",
+            "stl": "artifacts/headset-earcup/headset-earcup.stl",
+        },
+    },
+    {
+        "id": "headset-headband",
+        "source": "headset.py",
+        "builder": "headset:create_headset_headband",
+        "units": "mm",
+        "description": (
+            "Parametric headband. Default inner radius 105 mm over a 110° arc, "
+            "with an M3 clearance extension slot (3.4 mm) in each leg."
+        ),
+        "files": {
+            "step": "headset-headband.step",
+            "stl": "artifacts/headset-headband/headset-headband.stl",
+        },
+    },
+    {
+        "id": "headset-yoke",
+        "source": "headset.py",
+        "builder": "headset:create_headset_yoke",
+        "units": "mm",
+        "description": (
+            "Hinge yoke. Slider plate and clevis join the headband slot to the "
+            "earcup trunnion. Swivels on the M3 clamp screw; hinges on an M3 pin."
+        ),
+        "files": {
+            "step": "headset-yoke.step",
+            "stl": "artifacts/headset-yoke/headset-yoke.stl",
+        },
+    },
+    {
+        "id": "headset",
+        "source": "headset.py",
+        "builder": "headset:create_headset",
+        "units": "mm",
+        "description": (
+            "Wireless gaming headset shell kit: headband, two earcups, yokes, "
+            "covers, and ISO 4762 M3 socket-head screws in 3.4 mm clearance holes."
+        ),
+        "files": {
+            "step": "headset.step",
+            "stl": "artifacts/headset/headset.stl",
+        },
+    },
 ]
 
 

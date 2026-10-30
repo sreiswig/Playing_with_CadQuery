@@ -108,6 +108,22 @@ class CatalogLookupTests(unittest.TestCase):
                 "step": "m3-shcs.step",
                 "stl": "artifacts/m3-shcs/m3-shcs.stl",
             },
+            "headset-earcup": {
+                "step": "headset-earcup.step",
+                "stl": "artifacts/headset-earcup/headset-earcup.stl",
+            },
+            "headset-headband": {
+                "step": "headset-headband.step",
+                "stl": "artifacts/headset-headband/headset-headband.stl",
+            },
+            "headset-yoke": {
+                "step": "headset-yoke.step",
+                "stl": "artifacts/headset-yoke/headset-yoke.stl",
+            },
+            "headset": {
+                "step": "headset.step",
+                "stl": "artifacts/headset/headset.stl",
+            },
         }
         self.assertEqual([row["id"] for row in MODELS], list(expected))
         for model_id, files in expected.items():

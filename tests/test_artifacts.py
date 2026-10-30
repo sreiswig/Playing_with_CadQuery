@@ -31,12 +31,20 @@ COMMITTED_FETCH_FILES = (
     "box.step",
     "through-hole.step",
     "m3-shcs.step",
+    "headset-earcup.step",
+    "headset-headband.step",
+    "headset-yoke.step",
+    "headset.step",
     "artifacts/cat/cat.stl",
     "artifacts/drone/drone.stl",
     "artifacts/sonic/sonic.stl",
     "artifacts/box/box.stl",
     "artifacts/through-hole/through-hole.stl",
     "artifacts/m3-shcs/m3-shcs.stl",
+    "artifacts/headset-earcup/headset-earcup.stl",
+    "artifacts/headset-headband/headset-headband.stl",
+    "artifacts/headset-yoke/headset-yoke.stl",
+    "artifacts/headset/headset.stl",
 )
 
 
@@ -74,7 +82,19 @@ class ArtifactCatalogTests(unittest.TestCase):
         self.assertEqual(data["version"], 1)
         ids = {m["id"] for m in data["models"]}
         self.assertGreaterEqual(
-            ids, {"cat", "drone", "sonic", "box", "through-hole", "m3-shcs"}
+            ids,
+            {
+                "cat",
+                "drone",
+                "sonic",
+                "box",
+                "through-hole",
+                "m3-shcs",
+                "headset-earcup",
+                "headset-headband",
+                "headset-yoke",
+                "headset",
+            },
         )
         self.assertIn("sonic", ids)
         self.assertIn("box", ids)
@@ -295,6 +315,11 @@ class ArtifactCatalogTests(unittest.TestCase):
     def test_cli_url_path_and_fetch_m3_shcs(self):
         self._assert_cli_step_and_stl("m3-shcs")
 
+    def test_cli_url_path_and_fetch_headset_parts(self):
+        for model_id in ("headset-earcup", "headset-headband", "headset-yoke", "headset"):
+            with self.subTest(model=model_id):
+                self._assert_cli_step_and_stl(model_id)
+
     def _assert_cli_step_and_stl(self, model_id: str) -> None:
         url = subprocess.run(
             [sys.executable, "-m", "cq_artifacts", "url", model_id, "step"],
@@ -435,6 +460,18 @@ class ArtifactCatalogTests(unittest.TestCase):
         )
         assert_fetch_url_allowed(
             "https://raw.githubusercontent.com/sreiswig/Playing_with_CadQuery/main/artifacts/m3-shcs/m3-shcs.stl"
+        )
+        assert_fetch_url_allowed(
+            "https://raw.githubusercontent.com/sreiswig/Playing_with_CadQuery/main/headset.step"
+        )
+        assert_fetch_url_allowed(
+            "https://raw.githubusercontent.com/sreiswig/Playing_with_CadQuery/main/artifacts/headset/headset.stl"
+        )
+        assert_fetch_url_allowed(
+            "https://raw.githubusercontent.com/sreiswig/Playing_with_CadQuery/main/headset-earcup.step"
+        )
+        assert_fetch_url_allowed(
+            "https://raw.githubusercontent.com/sreiswig/Playing_with_CadQuery/main/artifacts/headset-yoke/headset-yoke.stl"
         )
 
     def test_allowlist_rejects_other_hosts(self):

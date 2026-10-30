@@ -259,6 +259,170 @@
       "stl_triangles": 1028,
       "stl_triangles_min": 925,
       "stl_triangles_max": 1131
+    },
+    {
+      "id": "headset-earcup",
+      "catalog": {
+        "id": "headset-earcup",
+        "source": "headset.py",
+        "builder": "headset:create_headset_earcup",
+        "units": "mm",
+        "description": "Circumaural earcup shell and back cover. Default seat fits a 50 mm dynamic driver (40–50 mm), with a pad lip, PCB and LiPo bay, mic-boom port, and flex pass-through. Cover holes are 3.4 mm.",
+        "files": {
+          "step": "headset-earcup.step",
+          "stl": "artifacts/headset-earcup/headset-earcup.stl"
+        }
+      },
+      "manifest": {
+        "id": "headset-earcup",
+        "source": "headset.py",
+        "builder": "headset:create_headset_earcup",
+        "units": "mm",
+        "description": "Circumaural earcup shell and back cover. Default seat fits a 50 mm dynamic driver (40–50 mm), with a pad lip, PCB and LiPo bay, mic-boom port, and flex pass-through. Cover holes are 3.4 mm.",
+        "files": {
+          "step": {
+            "path": "headset-earcup.step",
+            "url": "https://raw.githubusercontent.com/sreiswig/Playing_with_CadQuery/main/headset-earcup.step"
+          },
+          "stl": {
+            "path": "artifacts/headset-earcup/headset-earcup.stl",
+            "url": "https://raw.githubusercontent.com/sreiswig/Playing_with_CadQuery/main/artifacts/headset-earcup/headset-earcup.stl"
+          }
+        }
+      },
+      "volume_mm3": 77946.642374,
+      "bbox_mm": {
+        "xlen": 82.007889,
+        "ylen": 100.006024,
+        "zlen": 46.75515
+      },
+      "solid_count": 2,
+      "stl_triangles": 9076,
+      "stl_triangles_min": 8168,
+      "stl_triangles_max": 9984
+    },
+    {
+      "id": "headset-headband",
+      "catalog": {
+        "id": "headset-headband",
+        "source": "headset.py",
+        "builder": "headset:create_headset_headband",
+        "units": "mm",
+        "description": "Parametric headband. Default inner radius 105 mm over a 110° arc, with an M3 clearance extension slot (3.4 mm) in each leg.",
+        "files": {
+          "step": "headset-headband.step",
+          "stl": "artifacts/headset-headband/headset-headband.stl"
+        }
+      },
+      "manifest": {
+        "id": "headset-headband",
+        "source": "headset.py",
+        "builder": "headset:create_headset_headband",
+        "units": "mm",
+        "description": "Parametric headband. Default inner radius 105 mm over a 110° arc, with an M3 clearance extension slot (3.4 mm) in each leg.",
+        "files": {
+          "step": {
+            "path": "headset-headband.step",
+            "url": "https://raw.githubusercontent.com/sreiswig/Playing_with_CadQuery/main/headset-headband.step"
+          },
+          "stl": {
+            "path": "artifacts/headset-headband/headset-headband.stl",
+            "url": "https://raw.githubusercontent.com/sreiswig/Playing_with_CadQuery/main/artifacts/headset-headband/headset-headband.stl"
+          }
+        }
+      },
+      "volume_mm3": 22807.656934,
+      "bbox_mm": {
+        "xlen": 179.298538,
+        "ylen": 104.627322,
+        "zlen": 18.065056
+      },
+      "solid_count": 1,
+      "stl_triangles": 380,
+      "stl_triangles_min": 342,
+      "stl_triangles_max": 419
+    },
+    {
+      "id": "headset-yoke",
+      "catalog": {
+        "id": "headset-yoke",
+        "source": "headset.py",
+        "builder": "headset:create_headset_yoke",
+        "units": "mm",
+        "description": "Hinge yoke. Slider plate and clevis join the headband slot to the earcup trunnion. Swivels on the M3 clamp screw; hinges on an M3 pin.",
+        "files": {
+          "step": "headset-yoke.step",
+          "stl": "artifacts/headset-yoke/headset-yoke.stl"
+        }
+      },
+      "manifest": {
+        "id": "headset-yoke",
+        "source": "headset.py",
+        "builder": "headset:create_headset_yoke",
+        "units": "mm",
+        "description": "Hinge yoke. Slider plate and clevis join the headband slot to the earcup trunnion. Swivels on the M3 clamp screw; hinges on an M3 pin.",
+        "files": {
+          "step": {
+            "path": "headset-yoke.step",
+            "url": "https://raw.githubusercontent.com/sreiswig/Playing_with_CadQuery/main/headset-yoke.step"
+          },
+          "stl": {
+            "path": "artifacts/headset-yoke/headset-yoke.stl",
+            "url": "https://raw.githubusercontent.com/sreiswig/Playing_with_CadQuery/main/artifacts/headset-yoke/headset-yoke.stl"
+          }
+        }
+      },
+      "volume_mm3": 5179.295494,
+      "bbox_mm": {
+        "xlen": 28.750529,
+        "ylen": 31.4,
+        "zlen": 21.201057
+      },
+      "solid_count": 1,
+      "stl_triangles": 1584,
+      "stl_triangles_min": 1425,
+      "stl_triangles_max": 1743
+    },
+    {
+      "id": "headset",
+      "catalog": {
+        "id": "headset",
+        "source": "headset.py",
+        "builder": "headset:create_headset",
+        "units": "mm",
+        "description": "Wireless gaming headset shell kit: headband, two earcups, yokes, covers, and ISO 4762 M3 socket-head screws in 3.4 mm clearance holes.",
+        "files": {
+          "step": "headset.step",
+          "stl": "artifacts/headset/headset.stl"
+        }
+      },
+      "manifest": {
+        "id": "headset",
+        "source": "headset.py",
+        "builder": "headset:create_headset",
+        "units": "mm",
+        "description": "Wireless gaming headset shell kit: headband, two earcups, yokes, covers, and ISO 4762 M3 socket-head screws in 3.4 mm clearance holes.",
+        "files": {
+          "step": {
+            "path": "headset.step",
+            "url": "https://raw.githubusercontent.com/sreiswig/Playing_with_CadQuery/main/headset.step"
+          },
+          "stl": {
+            "path": "artifacts/headset/headset.stl",
+            "url": "https://raw.githubusercontent.com/sreiswig/Playing_with_CadQuery/main/artifacts/headset/headset.stl"
+          }
+        }
+      },
+      "volume_mm3": 190280.898179,
+      "bbox_mm": {
+        "xlen": 281.800247,
+        "ylen": 188.633346,
+        "zlen": 82.007889
+      },
+      "solid_count": 19,
+      "stl_triangles": 33536,
+      "stl_triangles_min": 30182,
+      "stl_triangles_max": 36890
     }
   ]
 }
