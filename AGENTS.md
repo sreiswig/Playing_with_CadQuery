@@ -1,7 +1,9 @@
 # Agent guide — Playing_with_CadQuery
 
 CadQuery playground. Solid models: **cat**, **drone**, **sonic** (figures), **box**,
-**through-hole**, and **m3-shcs** (mechanical catalog parts). Ranked mechanical roadmap:
+**through-hole**, and **m3-shcs** (mechanical catalog parts), plus a **headset**
+shell kit (**headset-earcup**, **headset-headband**, **headset-yoke**, **headset**).
+Ranked mechanical roadmap:
 [`docs/MECH_CATALOG.md`](docs/MECH_CATALOG.md) (v0.1).
 Other scripts (`tutorial.py`, `visuals.py`, `workplane_examples.py`) are
 learning notes, not export targets.
@@ -35,12 +37,20 @@ That prints the same document as [`artifacts/manifest.json`](artifacts/manifest.
 - Box STEP: https://raw.githubusercontent.com/sreiswig/Playing_with_CadQuery/main/box.step
 - Through-hole STEP: https://raw.githubusercontent.com/sreiswig/Playing_with_CadQuery/main/through-hole.step
 - M3 SHCS STEP: https://raw.githubusercontent.com/sreiswig/Playing_with_CadQuery/main/m3-shcs.step
+- Headset earcup STEP: https://raw.githubusercontent.com/sreiswig/Playing_with_CadQuery/main/headset-earcup.step
+- Headset headband STEP: https://raw.githubusercontent.com/sreiswig/Playing_with_CadQuery/main/headset-headband.step
+- Headset yoke STEP: https://raw.githubusercontent.com/sreiswig/Playing_with_CadQuery/main/headset-yoke.step
+- Headset assembly STEP: https://raw.githubusercontent.com/sreiswig/Playing_with_CadQuery/main/headset.step
 - Cat STL: https://raw.githubusercontent.com/sreiswig/Playing_with_CadQuery/main/artifacts/cat/cat.stl
 - Drone STL: https://raw.githubusercontent.com/sreiswig/Playing_with_CadQuery/main/artifacts/drone/drone.stl
 - Sonic STL: https://raw.githubusercontent.com/sreiswig/Playing_with_CadQuery/main/artifacts/sonic/sonic.stl
 - Box STL: https://raw.githubusercontent.com/sreiswig/Playing_with_CadQuery/main/artifacts/box/box.stl
 - Through-hole STL: https://raw.githubusercontent.com/sreiswig/Playing_with_CadQuery/main/artifacts/through-hole/through-hole.stl
 - M3 SHCS STL: https://raw.githubusercontent.com/sreiswig/Playing_with_CadQuery/main/artifacts/m3-shcs/m3-shcs.stl
+- Headset earcup STL: https://raw.githubusercontent.com/sreiswig/Playing_with_CadQuery/main/artifacts/headset-earcup/headset-earcup.stl
+- Headset headband STL: https://raw.githubusercontent.com/sreiswig/Playing_with_CadQuery/main/artifacts/headset-headband/headset-headband.stl
+- Headset yoke STL: https://raw.githubusercontent.com/sreiswig/Playing_with_CadQuery/main/artifacts/headset-yoke/headset-yoke.stl
+- Headset assembly STL: https://raw.githubusercontent.com/sreiswig/Playing_with_CadQuery/main/artifacts/headset/headset.stl
 
 Or:
 
@@ -51,6 +61,8 @@ python -m cq_artifacts url sonic step
 python -m cq_artifacts url box step
 python -m cq_artifacts url through-hole step
 python -m cq_artifacts url m3-shcs stl
+python -m cq_artifacts url headset step
+python -m cq_artifacts url headset-earcup stl
 ```
 
 STEP and STL are both committed; `export` rebuilds them.
@@ -64,6 +76,7 @@ python -m cq_artifacts fetch sonic step -o /tmp/sonic.step
 python -m cq_artifacts fetch box step -o /tmp/box.step
 python -m cq_artifacts fetch through-hole step -o /tmp/through-hole.step
 python -m cq_artifacts fetch m3-shcs step -o /tmp/m3-shcs.step
+python -m cq_artifacts fetch headset step -o /tmp/headset.step
 ```
 
 Uses the local file if present, otherwise the raw GitHub URL.
@@ -91,10 +104,13 @@ python -m cq_artifacts export --id sonic
 python -m cq_artifacts export --id box
 python -m cq_artifacts export --id through-hole
 python -m cq_artifacts export --id m3-shcs
+python -m cq_artifacts export --id headset-earcup
+python -m cq_artifacts export --id headset
 ```
 
 Export imports `create_cat` / `create_drone` / `create_sonic` / `create_box` /
-`create_through_hole` / `create_m3_shcs` and writes:
+`create_through_hole` / `create_m3_shcs` / `create_headset_earcup` /
+`create_headset_headband` / `create_headset_yoke` / `create_headset` and writes:
 
 | id            | STEP (committed)        | STL (committed)                              |
 |---------------|-------------------------|----------------------------------------------|
@@ -104,6 +120,10 @@ Export imports `create_cat` / `create_drone` / `create_sonic` / `create_box` /
 | box           | `box.step`              | `artifacts/box/box.stl`                      |
 | through-hole  | `through-hole.step`     | `artifacts/through-hole/through-hole.stl`    |
 | m3-shcs       | `m3-shcs.step`          | `artifacts/m3-shcs/m3-shcs.stl`              |
+| headset-earcup | `headset-earcup.step` | `artifacts/headset-earcup/headset-earcup.stl` |
+| headset-headband | `headset-headband.step` | `artifacts/headset-headband/headset-headband.stl` |
+| headset-yoke  | `headset-yoke.step`     | `artifacts/headset-yoke/headset-yoke.stl`     |
+| headset       | `headset.step`          | `artifacts/headset/headset.stl`                 |
 
 Then refreshes `artifacts/manifest.json`.
 
@@ -116,6 +136,7 @@ Do not add a server or auth. This repo is files + a CLI.
 3. Run `python -m cq_artifacts export --id <id>`.
 4. Commit STEP if it is small. Skip huge binaries.
 5. For mechanical parts, follow the ranked list in [`docs/MECH_CATALOG.md`](docs/MECH_CATALOG.md).
+   Reuse `create_m3_shcs` and the 3.4 mm clearance diameter instead of defining new screw or hole sizes.
 
 ## Out of scope
 

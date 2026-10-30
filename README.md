@@ -2,7 +2,8 @@
 
 Small CadQuery playground (Nix devenv). Models: a cat, a quadcopter, a
 stylized Sonic-like hedgehog (original geometry), a parametric **box**,
-an M3 **through-hole** plate, and an **m3-shcs** socket-head envelope.
+an M3 **through-hole** plate, an **m3-shcs** socket-head envelope, and a
+parametric **headset** shell kit (earcup, headband, hinge yoke, assembly).
 
 Mechanical roadmap (ranked list v0.1): [`docs/MECH_CATALOG.md`](docs/MECH_CATALOG.md).
 
@@ -17,5 +18,5 @@ python -m cq_artifacts export
 ```
 
 Humans: `cat_model.py`, `drone.py`, `sonic.py`, `box.py`, `through_hole.py`,
-and `m3_shcs.py` are the builders.
+`m3_shcs.py`, and `headset.py` are the builders.
 Open the `.step` files in FreeCAD or CQ-Editor.

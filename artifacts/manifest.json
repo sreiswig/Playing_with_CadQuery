@@ -59,7 +59,7 @@
       "source": "box.py",
       "builder": "box:create_box",
       "units": "mm",
-      "description": "Parametric rectangular prism (CadQuery box). Defaults 10×10×10 mm.",
+      "description": "Parametric rectangular prism (CadQuery box). Defaults 10\u00d710\u00d710 mm.",
       "files": {
         "step": {
           "path": "box.step",
@@ -76,7 +76,7 @@
       "source": "through_hole.py",
       "builder": "through_hole:create_through_hole",
       "units": "mm",
-      "description": "Plate with an ISO 273 medium-series M3 clearance hole (3.4 mm). Demo plate 20×20×3 mm (not from a standard), hole centred.",
+      "description": "Plate with an ISO 273 medium-series M3 clearance hole (3.4 mm). Demo plate 20\u00d720\u00d73 mm (not from a standard), hole centred.",
       "files": {
         "step": {
           "path": "through-hole.step",
@@ -93,7 +93,7 @@
       "source": "m3_shcs.py",
       "builder": "m3_shcs:create_m3_shcs",
       "units": "mm",
-      "description": "ISO 4762 M3 socket head cap screw envelope (no thread helix). Default length 10 mm. ISO 888 preferred lengths 5–30 mm.",
+      "description": "ISO 4762 M3 socket head cap screw envelope (no thread helix). Default length 10 mm. ISO 888 preferred lengths 5\u201330 mm.",
       "files": {
         "step": {
           "path": "m3-shcs.step",
@@ -102,6 +102,74 @@
         "stl": {
           "path": "artifacts/m3-shcs/m3-shcs.stl",
           "url": "https://raw.githubusercontent.com/sreiswig/Playing_with_CadQuery/main/artifacts/m3-shcs/m3-shcs.stl"
+        }
+      }
+    },
+    {
+      "id": "headset-earcup",
+      "source": "headset.py",
+      "builder": "headset:create_headset_earcup",
+      "units": "mm",
+      "description": "Circumaural earcup shell and back cover. Default seat fits a 50 mm dynamic driver (40\u201350 mm), with a pad lip, PCB and LiPo bay, mic-boom port, and flex pass-through. Cover holes are 3.4 mm.",
+      "files": {
+        "step": {
+          "path": "headset-earcup.step",
+          "url": "https://raw.githubusercontent.com/sreiswig/Playing_with_CadQuery/main/headset-earcup.step"
+        },
+        "stl": {
+          "path": "artifacts/headset-earcup/headset-earcup.stl",
+          "url": "https://raw.githubusercontent.com/sreiswig/Playing_with_CadQuery/main/artifacts/headset-earcup/headset-earcup.stl"
+        }
+      }
+    },
+    {
+      "id": "headset-headband",
+      "source": "headset.py",
+      "builder": "headset:create_headset_headband",
+      "units": "mm",
+      "description": "Parametric headband. Default inner radius 105 mm over a 110\u00b0 arc, with an M3 clearance extension slot (3.4 mm) in each leg.",
+      "files": {
+        "step": {
+          "path": "headset-headband.step",
+          "url": "https://raw.githubusercontent.com/sreiswig/Playing_with_CadQuery/main/headset-headband.step"
+        },
+        "stl": {
+          "path": "artifacts/headset-headband/headset-headband.stl",
+          "url": "https://raw.githubusercontent.com/sreiswig/Playing_with_CadQuery/main/artifacts/headset-headband/headset-headband.stl"
+        }
+      }
+    },
+    {
+      "id": "headset-yoke",
+      "source": "headset.py",
+      "builder": "headset:create_headset_yoke",
+      "units": "mm",
+      "description": "Hinge yoke. Slider plate and clevis join the headband slot to the earcup trunnion. Swivels on the M3 clamp screw; hinges on an M3 pin.",
+      "files": {
+        "step": {
+          "path": "headset-yoke.step",
+          "url": "https://raw.githubusercontent.com/sreiswig/Playing_with_CadQuery/main/headset-yoke.step"
+        },
+        "stl": {
+          "path": "artifacts/headset-yoke/headset-yoke.stl",
+          "url": "https://raw.githubusercontent.com/sreiswig/Playing_with_CadQuery/main/artifacts/headset-yoke/headset-yoke.stl"
+        }
+      }
+    },
+    {
+      "id": "headset",
+      "source": "headset.py",
+      "builder": "headset:create_headset",
+      "units": "mm",
+      "description": "Wireless gaming headset shell kit: headband, two earcups, yokes, covers, and ISO 4762 M3 socket-head screws in 3.4 mm clearance holes.",
+      "files": {
+        "step": {
+          "path": "headset.step",
+          "url": "https://raw.githubusercontent.com/sreiswig/Playing_with_CadQuery/main/headset.step"
+        },
+        "stl": {
+          "path": "artifacts/headset/headset.stl",
+          "url": "https://raw.githubusercontent.com/sreiswig/Playing_with_CadQuery/main/artifacts/headset/headset.stl"
         }
       }
     }
