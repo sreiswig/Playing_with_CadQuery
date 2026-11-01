@@ -60,4 +60,6 @@ Ranked roadmap of parametric FDM+CadQuery parts for this repo. **box**, **throug
 | m3-nut | Implemented (`m3_nut.py` / `create_m3_nut`) |
 | all others | Planned — do not invent ISO dimensions when implementing |
 
+The **headset** shell kit (`headset.py`) is a product model, not a row in the ranked list. Its enclosure fasteners reuse **m3-shcs** and the 3.4 mm **through-hole** diameter. Next ranked part is **m3-washer**.
+
 See [AGENTS.md](../AGENTS.md) for export/fetch conventions.

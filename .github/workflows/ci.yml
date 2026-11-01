@@ -49,5 +49,7 @@ jobs:
         run: python -c "import cadquery; print('cadquery', cadquery.__version__)"
       - name: Build smoke tests
         run: python -m unittest -v tests.test_build_smoke
+      - name: Headset fit tests
+        run: python -m unittest -v tests.test_headset_fit
       - name: Geometry drift tests
         run: python -m unittest -v tests.test_drift

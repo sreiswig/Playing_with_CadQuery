@@ -30,7 +30,19 @@ _STL_HEADER_BYTES = 80
 _STL_COUNT_BYTES = 4
 _STL_TRIANGLE_BYTES = 50
 _STEP_MAGIC = b"ISO-10303-21"
-_REQUIRED_MODELS = ("cat", "drone", "sonic", "box", "through-hole", "m3-shcs", "m3-nut")
+_REQUIRED_MODELS = (
+    "cat",
+    "drone",
+    "sonic",
+    "box",
+    "through-hole",
+    "m3-shcs",
+    "m3-nut",
+    "headset-earcup",
+    "headset-headband",
+    "headset-yoke",
+    "headset",
+)
 
 
 def _binary_stl_triangle_count(data: bytes) -> int | None:

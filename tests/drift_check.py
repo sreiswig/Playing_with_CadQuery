@@ -38,7 +38,19 @@ BBOX_REL_TOL = 0.005
 # STL triangle count window around the baseline count.
 STL_REL_TOL = 0.10
 
-REQUIRED_MODELS = ("cat", "drone", "sonic", "box", "through-hole", "m3-shcs", "m3-nut")
+REQUIRED_MODELS = (
+    "cat",
+    "drone",
+    "sonic",
+    "box",
+    "through-hole",
+    "m3-shcs",
+    "m3-nut",
+    "headset-earcup",
+    "headset-headband",
+    "headset-yoke",
+    "headset",
+)
 BBOX_AXES = ("xlen", "ylen", "zlen")
 
 _VOLUME_KEYS = {"volume", "volume_mm3"}
