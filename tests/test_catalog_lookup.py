@@ -108,6 +108,10 @@ class CatalogLookupTests(unittest.TestCase):
                 "step": "m3-shcs.step",
                 "stl": "artifacts/m3-shcs/m3-shcs.stl",
             },
+            "m3-nut": {
+                "step": "m3-nut.step",
+                "stl": "artifacts/m3-nut/m3-nut.stl",
+            },
         }
         self.assertEqual([row["id"] for row in MODELS], list(expected))
         for model_id, files in expected.items():

@@ -31,12 +31,14 @@ COMMITTED_FETCH_FILES = (
     "box.step",
     "through-hole.step",
     "m3-shcs.step",
+    "m3-nut.step",
     "artifacts/cat/cat.stl",
     "artifacts/drone/drone.stl",
     "artifacts/sonic/sonic.stl",
     "artifacts/box/box.stl",
     "artifacts/through-hole/through-hole.stl",
     "artifacts/m3-shcs/m3-shcs.stl",
+    "artifacts/m3-nut/m3-nut.stl",
 )
 
 
@@ -74,12 +76,13 @@ class ArtifactCatalogTests(unittest.TestCase):
         self.assertEqual(data["version"], 1)
         ids = {m["id"] for m in data["models"]}
         self.assertGreaterEqual(
-            ids, {"cat", "drone", "sonic", "box", "through-hole", "m3-shcs"}
+            ids, {"cat", "drone", "sonic", "box", "through-hole", "m3-shcs", "m3-nut"}
         )
         self.assertIn("sonic", ids)
         self.assertIn("box", ids)
         self.assertIn("through-hole", ids)
         self.assertIn("m3-shcs", ids)
+        self.assertIn("m3-nut", ids)
 
     def test_cli_url_and_path_cat_step(self):
         url = subprocess.run(
@@ -295,6 +298,9 @@ class ArtifactCatalogTests(unittest.TestCase):
     def test_cli_url_path_and_fetch_m3_shcs(self):
         self._assert_cli_step_and_stl("m3-shcs")
 
+    def test_cli_url_path_and_fetch_m3_nut(self):
+        self._assert_cli_step_and_stl("m3-nut")
+
     def _assert_cli_step_and_stl(self, model_id: str) -> None:
         url = subprocess.run(
             [sys.executable, "-m", "cq_artifacts", "url", model_id, "step"],
@@ -435,6 +441,12 @@ class ArtifactCatalogTests(unittest.TestCase):
         )
         assert_fetch_url_allowed(
             "https://raw.githubusercontent.com/sreiswig/Playing_with_CadQuery/main/artifacts/m3-shcs/m3-shcs.stl"
+        )
+        assert_fetch_url_allowed(
+            "https://raw.githubusercontent.com/sreiswig/Playing_with_CadQuery/main/m3-nut.step"
+        )
+        assert_fetch_url_allowed(
+            "https://raw.githubusercontent.com/sreiswig/Playing_with_CadQuery/main/artifacts/m3-nut/m3-nut.stl"
         )
 
     def test_allowlist_rejects_other_hosts(self):

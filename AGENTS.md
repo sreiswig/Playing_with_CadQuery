@@ -1,7 +1,7 @@
 # Agent guide — Playing_with_CadQuery
 
 CadQuery playground. Solid models: **cat**, **drone**, **sonic** (figures), **box**,
-**through-hole**, and **m3-shcs** (mechanical catalog parts). Ranked mechanical roadmap:
+**through-hole**, **m3-shcs**, and **m3-nut** (mechanical catalog parts). Ranked mechanical roadmap:
 [`docs/MECH_CATALOG.md`](docs/MECH_CATALOG.md) (v0.1).
 Other scripts (`tutorial.py`, `visuals.py`, `workplane_examples.py`) are
 learning notes, not export targets.
@@ -35,12 +35,14 @@ That prints the same document as [`artifacts/manifest.json`](artifacts/manifest.
 - Box STEP: https://raw.githubusercontent.com/sreiswig/Playing_with_CadQuery/main/box.step
 - Through-hole STEP: https://raw.githubusercontent.com/sreiswig/Playing_with_CadQuery/main/through-hole.step
 - M3 SHCS STEP: https://raw.githubusercontent.com/sreiswig/Playing_with_CadQuery/main/m3-shcs.step
+- M3 nut STEP: https://raw.githubusercontent.com/sreiswig/Playing_with_CadQuery/main/m3-nut.step
 - Cat STL: https://raw.githubusercontent.com/sreiswig/Playing_with_CadQuery/main/artifacts/cat/cat.stl
 - Drone STL: https://raw.githubusercontent.com/sreiswig/Playing_with_CadQuery/main/artifacts/drone/drone.stl
 - Sonic STL: https://raw.githubusercontent.com/sreiswig/Playing_with_CadQuery/main/artifacts/sonic/sonic.stl
 - Box STL: https://raw.githubusercontent.com/sreiswig/Playing_with_CadQuery/main/artifacts/box/box.stl
 - Through-hole STL: https://raw.githubusercontent.com/sreiswig/Playing_with_CadQuery/main/artifacts/through-hole/through-hole.stl
 - M3 SHCS STL: https://raw.githubusercontent.com/sreiswig/Playing_with_CadQuery/main/artifacts/m3-shcs/m3-shcs.stl
+- M3 nut STL: https://raw.githubusercontent.com/sreiswig/Playing_with_CadQuery/main/artifacts/m3-nut/m3-nut.stl
 
 Or:
 
@@ -51,6 +53,7 @@ python -m cq_artifacts url sonic step
 python -m cq_artifacts url box step
 python -m cq_artifacts url through-hole step
 python -m cq_artifacts url m3-shcs stl
+python -m cq_artifacts url m3-nut step
 ```
 
 STEP and STL are both committed; `export` rebuilds them.
@@ -64,6 +67,7 @@ python -m cq_artifacts fetch sonic step -o /tmp/sonic.step
 python -m cq_artifacts fetch box step -o /tmp/box.step
 python -m cq_artifacts fetch through-hole step -o /tmp/through-hole.step
 python -m cq_artifacts fetch m3-shcs step -o /tmp/m3-shcs.step
+python -m cq_artifacts fetch m3-nut step -o /tmp/m3-nut.step
 ```
 
 Uses the local file if present, otherwise the raw GitHub URL.
@@ -91,10 +95,11 @@ python -m cq_artifacts export --id sonic
 python -m cq_artifacts export --id box
 python -m cq_artifacts export --id through-hole
 python -m cq_artifacts export --id m3-shcs
+python -m cq_artifacts export --id m3-nut
 ```
 
 Export imports `create_cat` / `create_drone` / `create_sonic` / `create_box` /
-`create_through_hole` / `create_m3_shcs` and writes:
+`create_through_hole` / `create_m3_shcs` / `create_m3_nut` and writes:
 
 | id            | STEP (committed)        | STL (committed)                              |
 |---------------|-------------------------|----------------------------------------------|
@@ -104,6 +109,7 @@ Export imports `create_cat` / `create_drone` / `create_sonic` / `create_box` /
 | box           | `box.step`              | `artifacts/box/box.stl`                      |
 | through-hole  | `through-hole.step`     | `artifacts/through-hole/through-hole.stl`    |
 | m3-shcs       | `m3-shcs.step`          | `artifacts/m3-shcs/m3-shcs.stl`              |
+| m3-nut        | `m3-nut.step`           | `artifacts/m3-nut/m3-nut.stl`                |
 
 Then refreshes `artifacts/manifest.json`.
 
