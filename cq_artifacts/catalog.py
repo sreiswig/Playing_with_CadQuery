@@ -85,6 +85,20 @@ MODELS: list[dict[str, Any]] = [
             "stl": "artifacts/m3-shcs/m3-shcs.stl",
         },
     },
+    {
+        "id": "m3-nut",
+        "source": "m3_nut.py",
+        "builder": "m3_nut:create_m3_nut",
+        "units": "mm",
+        "description": (
+            "ISO 4032 style 1 M3 hex nut envelope (no thread helix). "
+            "Across flats 5.5 mm, height 2.4 mm, bore 3.0 mm."
+        ),
+        "files": {
+            "step": "m3-nut.step",
+            "stl": "artifacts/m3-nut/m3-nut.stl",
+        },
+    },
 ]
 
 

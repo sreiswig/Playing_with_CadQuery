@@ -1,6 +1,6 @@
 # Mechanical catalog v0.1
 
-Ranked roadmap of parametric FDM+CadQuery parts for this repo. **box**, **through-hole**, and **m3-shcs** are implemented; later rows are planned builds.
+Ranked roadmap of parametric FDM+CadQuery parts for this repo. **box**, **through-hole**, **m3-shcs**, and **m3-nut** are implemented; later rows are planned builds.
 
 ## Rules
 
@@ -11,7 +11,7 @@ Ranked roadmap of parametric FDM+CadQuery parts for this repo. **box**, **throug
 - **Cite specs** in notes (ISO / DIN / McMaster / Misumi / Gates as applicable).
 - **Packaging** matches existing models (**cat** / **drone** / **sonic**): register in `cq_artifacts/catalog.py` `MODELS`, commit STEP at repo root and STL under `artifacts/<id>/`, refresh `artifacts/manifest.json`.
 - **Fetch allowlist:** `https://raw.githubusercontent.com/sreiswig/Playing_with_CadQuery/` only (see `cq_artifacts/fetch.py`).
-- **Build next:** **m3-nut** (ISO 4032).
+- **Build next:** **m3-washer** (ISO 7089 normal).
 
 ## Ranked list (v0.1)
 
@@ -21,7 +21,7 @@ Ranked roadmap of parametric FDM+CadQuery parts for this repo. **box**, **throug
 | 2 | cylinder | cylinder | 1 | d,h | shaft/boss stock |
 | 3 | through-hole | through hole | 1 | d, L, W, t, hole position | ISO 273 medium (M3=3.4 mm). Demo plate 20×20×3 mm is not from a standard |
 | 4 | m3-shcs | M3 SHCS | 1 | length ISO 888, 5–30 | ISO 4762 envelope dk max 5.5 / k max 3.0 / s 2.5; M3×0.5 ISO 262; preferred lengths 5, 6, 8, 10, 12, 16, 20, 25, 30; not ISO 4017 |
-| 5 | m3-nut | M3 hex nut | 1 | style 1 | ISO 4032 |
+| 5 | m3-nut | M3 hex nut | 1 | style 1 | ISO 4032 envelope s max 5.5 / m max 2.4; bore da min 3.0; M3×0.5 ISO 262; regular hex of s max (wider than e min 6.01); no chamfer, no thread helix |
 | 6 | m3-washer | M3 washer | 1 | series | ISO 7089 normal |
 | 7 | counterbore | SHCS counterbore | 2 | thread,t | ISO 4762 head envelope + ISO 273 hole; DIN 974-1 only for shop CB |
 | 8 | plate | plate | 2 | L,W,t,hole grid | printable |
@@ -57,6 +57,7 @@ Ranked roadmap of parametric FDM+CadQuery parts for this repo. **box**, **throug
 | box | Implemented (`box.py` / `create_box`) |
 | through-hole | Implemented (`through_hole.py` / `create_through_hole`) |
 | m3-shcs | Implemented (`m3_shcs.py` / `create_m3_shcs`) |
+| m3-nut | Implemented (`m3_nut.py` / `create_m3_nut`) |
 | all others | Planned — do not invent ISO dimensions when implementing |
 
 See [AGENTS.md](../AGENTS.md) for export/fetch conventions.
