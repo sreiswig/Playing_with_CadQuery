@@ -36,6 +36,9 @@ COMMITTED_FETCH_FILES = (
     "headset-headband.step",
     "headset-yoke.step",
     "headset.step",
+    "bottle-rack-guide.step",
+    "bottle-rack-gate.step",
+    "bottle-rack.step",
     "artifacts/cat/cat.stl",
     "artifacts/drone/drone.stl",
     "artifacts/sonic/sonic.stl",
@@ -47,6 +50,9 @@ COMMITTED_FETCH_FILES = (
     "artifacts/headset-headband/headset-headband.stl",
     "artifacts/headset-yoke/headset-yoke.stl",
     "artifacts/headset/headset.stl",
+    "artifacts/bottle-rack-guide/bottle-rack-guide.stl",
+    "artifacts/bottle-rack-gate/bottle-rack-gate.stl",
+    "artifacts/bottle-rack/bottle-rack.stl",
 )
 
 
@@ -97,6 +103,9 @@ class ArtifactCatalogTests(unittest.TestCase):
                 "headset-headband",
                 "headset-yoke",
                 "headset",
+                "bottle-rack-guide",
+                "bottle-rack-gate",
+                "bottle-rack",
             },
         )
         self.assertIn("sonic", ids)

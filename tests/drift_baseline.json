@@ -464,6 +464,129 @@
       "stl_triangles": 33536,
       "stl_triangles_min": 30182,
       "stl_triangles_max": 36890
+    },
+    {
+      "id": "bottle-rack-guide",
+      "catalog": {
+        "id": "bottle-rack-guide",
+        "source": "bottle_rack.py",
+        "builder": "bottle_rack:create_bottle_rack_guide",
+        "units": "mm",
+        "description": "Printed lane guide for the bottle rack. Default length matches a 5-deep lane of 110 mm bottles. Three 3.4 mm flange holes.",
+        "files": {
+          "step": "bottle-rack-guide.step",
+          "stl": "artifacts/bottle-rack-guide/bottle-rack-guide.stl"
+        }
+      },
+      "manifest": {
+        "id": "bottle-rack-guide",
+        "source": "bottle_rack.py",
+        "builder": "bottle_rack:create_bottle_rack_guide",
+        "units": "mm",
+        "description": "Printed lane guide for the bottle rack. Default length matches a 5-deep lane of 110 mm bottles. Three 3.4 mm flange holes.",
+        "files": {
+          "step": {
+            "path": "bottle-rack-guide.step",
+            "url": "https://raw.githubusercontent.com/sreiswig/Playing_with_CadQuery/main/bottle-rack-guide.step"
+          },
+          "stl": {
+            "path": "artifacts/bottle-rack-guide/bottle-rack-guide.stl",
+            "url": "https://raw.githubusercontent.com/sreiswig/Playing_with_CadQuery/main/artifacts/bottle-rack-guide/bottle-rack-guide.stl"
+          }
+        }
+      },
+      "volume_mm3": 73222.287175,
+      "bbox_mm": {
+        "xlen": 18.0,
+        "ylen": 616.0,
+        "zlen": 16.000529
+      },
+      "solid_count": 1,
+      "stl_triangles": 1544,
+      "stl_triangles_min": 1389,
+      "stl_triangles_max": 1699
+    },
+    {
+      "id": "bottle-rack-gate",
+      "catalog": {
+        "id": "bottle-rack-gate",
+        "source": "bottle_rack.py",
+        "builder": "bottle_rack:create_bottle_rack_gate",
+        "units": "mm",
+        "description": "Printed outlet lift gate with a finger notch. Default opening suits a 110 mm bottle. One gate per lane.",
+        "files": {
+          "step": "bottle-rack-gate.step",
+          "stl": "artifacts/bottle-rack-gate/bottle-rack-gate.stl"
+        }
+      },
+      "manifest": {
+        "id": "bottle-rack-gate",
+        "source": "bottle_rack.py",
+        "builder": "bottle_rack:create_bottle_rack_gate",
+        "units": "mm",
+        "description": "Printed outlet lift gate with a finger notch. Default opening suits a 110 mm bottle. One gate per lane.",
+        "files": {
+          "step": {
+            "path": "bottle-rack-gate.step",
+            "url": "https://raw.githubusercontent.com/sreiswig/Playing_with_CadQuery/main/bottle-rack-gate.step"
+          },
+          "stl": {
+            "path": "artifacts/bottle-rack-gate/bottle-rack-gate.stl",
+            "url": "https://raw.githubusercontent.com/sreiswig/Playing_with_CadQuery/main/artifacts/bottle-rack-gate/bottle-rack-gate.stl"
+          }
+        }
+      },
+      "volume_mm3": 53375.52,
+      "bbox_mm": {
+        "xlen": 160.0,
+        "ylen": 60.5,
+        "zlen": 6.0
+      },
+      "solid_count": 1,
+      "stl_triangles": 28,
+      "stl_triangles_min": 25,
+      "stl_triangles_max": 31
+    },
+    {
+      "id": "bottle-rack",
+      "catalog": {
+        "id": "bottle-rack",
+        "source": "bottle_rack.py",
+        "builder": "bottle_rack:create_bottle_rack",
+        "units": "mm",
+        "description": "Gravity-fed FIFO bottle rack. Default module is 3 lanes by 5 deep for a 110×310 mm bottle at 7°, plywood plus 20×20 mm 2020 envelopes, with lane guides, lift gates, sensor holes, a cable groove, side-tile pins, and a 2-high stack interlock. Cut list: artifacts/bottle-rack/cut-list.json.",
+        "files": {
+          "step": "bottle-rack.step",
+          "stl": "artifacts/bottle-rack/bottle-rack.stl"
+        }
+      },
+      "manifest": {
+        "id": "bottle-rack",
+        "source": "bottle_rack.py",
+        "builder": "bottle_rack:create_bottle_rack",
+        "units": "mm",
+        "description": "Gravity-fed FIFO bottle rack. Default module is 3 lanes by 5 deep for a 110×310 mm bottle at 7°, plywood plus 20×20 mm 2020 envelopes, with lane guides, lift gates, sensor holes, a cable groove, side-tile pins, and a 2-high stack interlock. Cut list: artifacts/bottle-rack/cut-list.json.",
+        "files": {
+          "step": {
+            "path": "bottle-rack.step",
+            "url": "https://raw.githubusercontent.com/sreiswig/Playing_with_CadQuery/main/bottle-rack.step"
+          },
+          "stl": {
+            "path": "artifacts/bottle-rack/bottle-rack.stl",
+            "url": "https://raw.githubusercontent.com/sreiswig/Playing_with_CadQuery/main/artifacts/bottle-rack/bottle-rack.stl"
+          }
+        }
+      },
+      "volume_mm3": 22905105.66837,
+      "bbox_mm": {
+        "xlen": 389.002487,
+        "ylen": 678.870862,
+        "zlen": 532.457691
+      },
+      "solid_count": 29,
+      "stl_triangles": 21016,
+      "stl_triangles_min": 18914,
+      "stl_triangles_max": 23118
     }
   ]
 }

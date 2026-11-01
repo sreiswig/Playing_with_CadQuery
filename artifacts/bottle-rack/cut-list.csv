@@ -1,0 +1,16 @@
+kind,name,material,qty,length_mm,width_mm,thickness_mm,notes
+cut,side-panel,plywood,2,678.871,524.458,12.0,"Full sides. Right panel: cable groove, inlet and outlet sensor holes, ESP32 pattern. Left panel: tile pockets."
+cut,base,plywood,1,678.871,356.0,12.0,Floor between the side panels.
+cut,back-panel,plywood,1,500.458,316.0,12.0,Loading window for each lane.
+cut,deck,plywood,3,616.0,356.0,12.0,One sloped lane floor. Install at the module slope.
+cut,front-apron,plywood,1,32.0,356.0,12.0,Closes the front below the outlet.
+cut,top-strip,plywood,2,78.0,356.0,12.0,Front and rear strips with hooked stack pockets.
+cut,stack-foot,plywood,4,24.0,16.0,8.0,Locating foot with a forward toe. Glue or screw under the base.
+cut,post,2020 extrusion envelope,2,500.458,20.0,20.0,Rear corners. 20×20 mm outer envelope only; T-slot is not cut here.
+cut,rail,2020 extrusion envelope,2,356.0,20.0,20.0,Top front and top rear rails. 20×20 mm outer envelope only.
+cut,lane-guide,PLA or PETG,6,616.0,18.0,16.0,Printed side guide. Three 3.4 mm holes in the flange.
+cut,outlet-gate,PLA or PETG,3,160.0,60.5,6.0,Printed lift gate with a finger notch. One per lane.
+cut,tile-pin,PLA or PETG,2,18.0,7.6,7.6,Press into the right side. The left side of the next module has the pocket.
+hardware,M3x12 SHCS,ISO 4762 / ISO 888,18,,,,Lane guides into the decks. Clearance drill 3.4 mm (ISO 273 medium).
+hardware,M3x10 SHCS,ISO 4762 / ISO 888,16,,,,"Two screws at each lane inlet, two at each lane outlet, four on the ESP32 pattern."
+hardware,M3 hex nut,ISO 4032,16,,,,Nuts for the sensor and ESP32 screws.

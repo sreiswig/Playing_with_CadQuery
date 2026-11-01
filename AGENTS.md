@@ -3,7 +3,8 @@
 CadQuery playground. Solid models: **cat**, **drone**, **sonic** (figures), **box**,
 **through-hole**, **m3-shcs**, and **m3-nut** (mechanical catalog parts), plus a
 **headset** shell kit (**headset-earcup**, **headset-headband**, **headset-yoke**,
-**headset**). Ranked mechanical roadmap:
+**headset**), and a **bottle rack** (**bottle-rack-guide**, **bottle-rack-gate**,
+**bottle-rack**). Ranked mechanical roadmap:
 [`docs/MECH_CATALOG.md`](docs/MECH_CATALOG.md) (v0.1).
 Other scripts (`tutorial.py`, `visuals.py`, `workplane_examples.py`) are
 learning notes, not export targets.
@@ -42,6 +43,9 @@ That prints the same document as [`artifacts/manifest.json`](artifacts/manifest.
 - Headset headband STEP: https://raw.githubusercontent.com/sreiswig/Playing_with_CadQuery/main/headset-headband.step
 - Headset yoke STEP: https://raw.githubusercontent.com/sreiswig/Playing_with_CadQuery/main/headset-yoke.step
 - Headset assembly STEP: https://raw.githubusercontent.com/sreiswig/Playing_with_CadQuery/main/headset.step
+- Bottle-rack guide STEP: https://raw.githubusercontent.com/sreiswig/Playing_with_CadQuery/main/bottle-rack-guide.step
+- Bottle-rack gate STEP: https://raw.githubusercontent.com/sreiswig/Playing_with_CadQuery/main/bottle-rack-gate.step
+- Bottle-rack assembly STEP: https://raw.githubusercontent.com/sreiswig/Playing_with_CadQuery/main/bottle-rack.step
 - Cat STL: https://raw.githubusercontent.com/sreiswig/Playing_with_CadQuery/main/artifacts/cat/cat.stl
 - Drone STL: https://raw.githubusercontent.com/sreiswig/Playing_with_CadQuery/main/artifacts/drone/drone.stl
 - Sonic STL: https://raw.githubusercontent.com/sreiswig/Playing_with_CadQuery/main/artifacts/sonic/sonic.stl
@@ -53,6 +57,9 @@ That prints the same document as [`artifacts/manifest.json`](artifacts/manifest.
 - Headset headband STL: https://raw.githubusercontent.com/sreiswig/Playing_with_CadQuery/main/artifacts/headset-headband/headset-headband.stl
 - Headset yoke STL: https://raw.githubusercontent.com/sreiswig/Playing_with_CadQuery/main/artifacts/headset-yoke/headset-yoke.stl
 - Headset assembly STL: https://raw.githubusercontent.com/sreiswig/Playing_with_CadQuery/main/artifacts/headset/headset.stl
+- Bottle-rack guide STL: https://raw.githubusercontent.com/sreiswig/Playing_with_CadQuery/main/artifacts/bottle-rack-guide/bottle-rack-guide.stl
+- Bottle-rack gate STL: https://raw.githubusercontent.com/sreiswig/Playing_with_CadQuery/main/artifacts/bottle-rack-gate/bottle-rack-gate.stl
+- Bottle-rack assembly STL: https://raw.githubusercontent.com/sreiswig/Playing_with_CadQuery/main/artifacts/bottle-rack/bottle-rack.stl
 
 Or:
 
@@ -66,6 +73,8 @@ python -m cq_artifacts url m3-shcs stl
 python -m cq_artifacts url m3-nut step
 python -m cq_artifacts url headset step
 python -m cq_artifacts url headset-earcup stl
+python -m cq_artifacts url bottle-rack step
+python -m cq_artifacts url bottle-rack-guide stl
 ```
 
 STEP and STL are both committed; `export` rebuilds them.
@@ -81,6 +90,7 @@ python -m cq_artifacts fetch through-hole step -o /tmp/through-hole.step
 python -m cq_artifacts fetch m3-shcs step -o /tmp/m3-shcs.step
 python -m cq_artifacts fetch m3-nut step -o /tmp/m3-nut.step
 python -m cq_artifacts fetch headset step -o /tmp/headset.step
+python -m cq_artifacts fetch bottle-rack step -o /tmp/bottle-rack.step
 ```
 
 Uses the local file if present, otherwise the raw GitHub URL.
@@ -111,12 +121,15 @@ python -m cq_artifacts export --id m3-shcs
 python -m cq_artifacts export --id m3-nut
 python -m cq_artifacts export --id headset-earcup
 python -m cq_artifacts export --id headset
+python -m cq_artifacts export --id bottle-rack-guide
+python -m cq_artifacts export --id bottle-rack
 ```
 
 Export imports `create_cat` / `create_drone` / `create_sonic` / `create_box` /
 `create_through_hole` / `create_m3_shcs` / `create_m3_nut` /
 `create_headset_earcup` / `create_headset_headband` / `create_headset_yoke` /
-`create_headset` and writes:
+`create_headset` / `create_bottle_rack_guide` / `create_bottle_rack_gate` /
+`create_bottle_rack` and writes:
 
 | id            | STEP (committed)        | STL (committed)                              |
 |---------------|-------------------------|----------------------------------------------|
@@ -131,6 +144,17 @@ Export imports `create_cat` / `create_drone` / `create_sonic` / `create_box` /
 | headset-headband | `headset-headband.step` | `artifacts/headset-headband/headset-headband.stl` |
 | headset-yoke  | `headset-yoke.step`     | `artifacts/headset-yoke/headset-yoke.stl`     |
 | headset       | `headset.step`          | `artifacts/headset/headset.stl`                 |
+| bottle-rack-guide | `bottle-rack-guide.step` | `artifacts/bottle-rack-guide/bottle-rack-guide.stl` |
+| bottle-rack-gate | `bottle-rack-gate.step` | `artifacts/bottle-rack-gate/bottle-rack-gate.stl` |
+| bottle-rack   | `bottle-rack.step`      | `artifacts/bottle-rack/bottle-rack.stl`       |
+
+The bottle-rack cut list is generated from the same parameters:
+
+```bash
+python -c "from cq_artifacts.bottle_rack_dims import write_cut_list; write_cut_list('artifacts/bottle-rack')"
+```
+
+That writes `artifacts/bottle-rack/cut-list.json` and `cut-list.csv`.
 
 Then refreshes `artifacts/manifest.json`.
 

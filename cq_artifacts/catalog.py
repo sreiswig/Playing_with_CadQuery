@@ -156,6 +156,50 @@ MODELS: list[dict[str, Any]] = [
             "stl": "artifacts/headset/headset.stl",
         },
     },
+    {
+        "id": "bottle-rack-guide",
+        "source": "bottle_rack.py",
+        "builder": "bottle_rack:create_bottle_rack_guide",
+        "units": "mm",
+        "description": (
+            "Printed lane guide for the bottle rack. Default length matches a "
+            "5-deep lane of 110 mm bottles. Three 3.4 mm flange holes."
+        ),
+        "files": {
+            "step": "bottle-rack-guide.step",
+            "stl": "artifacts/bottle-rack-guide/bottle-rack-guide.stl",
+        },
+    },
+    {
+        "id": "bottle-rack-gate",
+        "source": "bottle_rack.py",
+        "builder": "bottle_rack:create_bottle_rack_gate",
+        "units": "mm",
+        "description": (
+            "Printed outlet lift gate with a finger notch. Default opening "
+            "suits a 110 mm bottle. One gate per lane."
+        ),
+        "files": {
+            "step": "bottle-rack-gate.step",
+            "stl": "artifacts/bottle-rack-gate/bottle-rack-gate.stl",
+        },
+    },
+    {
+        "id": "bottle-rack",
+        "source": "bottle_rack.py",
+        "builder": "bottle_rack:create_bottle_rack",
+        "units": "mm",
+        "description": (
+            "Gravity-fed FIFO bottle rack. Default module is 3 lanes by 5 deep "
+            "for a 110×310 mm bottle at 7°, plywood plus 20×20 mm 2020 envelopes, "
+            "with lane guides, lift gates, sensor holes, a cable groove, side-tile "
+            "pins, and a 2-high stack interlock. Cut list: artifacts/bottle-rack/cut-list.json."
+        ),
+        "files": {
+            "step": "bottle-rack.step",
+            "stl": "artifacts/bottle-rack/bottle-rack.stl",
+        },
+    },
 ]
 
 

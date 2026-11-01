@@ -128,6 +128,18 @@ class CatalogLookupTests(unittest.TestCase):
                 "step": "headset.step",
                 "stl": "artifacts/headset/headset.stl",
             },
+            "bottle-rack-guide": {
+                "step": "bottle-rack-guide.step",
+                "stl": "artifacts/bottle-rack-guide/bottle-rack-guide.stl",
+            },
+            "bottle-rack-gate": {
+                "step": "bottle-rack-gate.step",
+                "stl": "artifacts/bottle-rack-gate/bottle-rack-gate.stl",
+            },
+            "bottle-rack": {
+                "step": "bottle-rack.step",
+                "stl": "artifacts/bottle-rack/bottle-rack.stl",
+            },
         }
         self.assertEqual([row["id"] for row in MODELS], list(expected))
         for model_id, files in expected.items():
