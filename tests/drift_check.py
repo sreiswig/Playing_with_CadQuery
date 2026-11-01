@@ -45,6 +45,7 @@ REQUIRED_MODELS = (
     "box",
     "through-hole",
     "m3-shcs",
+    "m3-nut",
     "headset-earcup",
     "headset-headband",
     "headset-yoke",

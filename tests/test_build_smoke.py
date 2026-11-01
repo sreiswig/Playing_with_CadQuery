@@ -37,6 +37,7 @@ _REQUIRED_MODELS = (
     "box",
     "through-hole",
     "m3-shcs",
+    "m3-nut",
     "headset-earcup",
     "headset-headband",
     "headset-yoke",
@@ -259,6 +260,51 @@ class BuildSmokeTests(unittest.TestCase):
             screw_volume(longer_spec.value),
             (5.5, 5.5, 19.0),
         )
+
+    def test_m3_nut_matches_cited_envelope(self):
+        import math
+
+        from cq_artifacts.m3_nut_dims import across_corners_mm
+        from cq_artifacts.m3_nut_dims import make_m3_nut
+        from cq_artifacts.m3_nut_dims import volume_mm3 as nut_volume
+        from m3_nut import create_m3_nut
+
+        spec = make_m3_nut()
+        nut = self._shape(create_m3_nut())
+        corners = across_corners_mm()
+        self._assert_envelope(
+            nut,
+            nut_volume(spec),
+            (5.5, corners, 2.4),
+        )
+        mid_z = 1.2
+        self.assertFalse(nut.isInside((0, 0, mid_z)))
+        self.assertFalse(nut.isInside((1.45, 0, mid_z)))
+        self.assertTrue(nut.isInside((1.60, 0, mid_z)))
+        self.assertTrue(nut.isInside((2.70, 0, mid_z)))
+        self.assertFalse(nut.isInside((2.80, 0, mid_z)))
+        self.assertTrue(nut.isInside((0, 3.00, mid_z)))
+        self.assertFalse(nut.isInside((0, 3.20, mid_z)))
+        self.assertTrue(nut.isInside((0, 2.0, 0.2)))
+        self.assertTrue(nut.isInside((0, 2.0, 2.2)))
+        self.assertFalse(nut.isInside((0, 2.0, -0.1)))
+        self.assertFalse(nut.isInside((0, 2.0, 2.5)))
+        for angle in range(0, 360, 45):
+            hole = (
+                1.45 * math.cos(math.radians(angle)),
+                1.45 * math.sin(math.radians(angle)),
+                mid_z,
+            )
+            wall = (
+                1.65 * math.cos(math.radians(angle)),
+                1.65 * math.sin(math.radians(angle)),
+                mid_z,
+            )
+            self.assertFalse(nut.isInside(hole), hole)
+            self.assertTrue(nut.isInside(wall), wall)
+        self.assertAlmostEqual(nut.Center().x, 0.0, places=6)
+        self.assertAlmostEqual(nut.Center().y, 0.0, places=6)
+        self.assertAlmostEqual(nut.Center().z, mid_z, places=6)
 
     def _shape(self, workplane):
         import cadquery as cq

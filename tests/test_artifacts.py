@@ -31,6 +31,7 @@ COMMITTED_FETCH_FILES = (
     "box.step",
     "through-hole.step",
     "m3-shcs.step",
+    "m3-nut.step",
     "headset-earcup.step",
     "headset-headband.step",
     "headset-yoke.step",
@@ -41,6 +42,7 @@ COMMITTED_FETCH_FILES = (
     "artifacts/box/box.stl",
     "artifacts/through-hole/through-hole.stl",
     "artifacts/m3-shcs/m3-shcs.stl",
+    "artifacts/m3-nut/m3-nut.stl",
     "artifacts/headset-earcup/headset-earcup.stl",
     "artifacts/headset-headband/headset-headband.stl",
     "artifacts/headset-yoke/headset-yoke.stl",
@@ -90,6 +92,7 @@ class ArtifactCatalogTests(unittest.TestCase):
                 "box",
                 "through-hole",
                 "m3-shcs",
+                "m3-nut",
                 "headset-earcup",
                 "headset-headband",
                 "headset-yoke",
@@ -100,6 +103,7 @@ class ArtifactCatalogTests(unittest.TestCase):
         self.assertIn("box", ids)
         self.assertIn("through-hole", ids)
         self.assertIn("m3-shcs", ids)
+        self.assertIn("m3-nut", ids)
 
     def test_cli_url_and_path_cat_step(self):
         url = subprocess.run(
@@ -315,6 +319,9 @@ class ArtifactCatalogTests(unittest.TestCase):
     def test_cli_url_path_and_fetch_m3_shcs(self):
         self._assert_cli_step_and_stl("m3-shcs")
 
+    def test_cli_url_path_and_fetch_m3_nut(self):
+        self._assert_cli_step_and_stl("m3-nut")
+
     def test_cli_url_path_and_fetch_headset_parts(self):
         for model_id in ("headset-earcup", "headset-headband", "headset-yoke", "headset"):
             with self.subTest(model=model_id):
@@ -460,6 +467,12 @@ class ArtifactCatalogTests(unittest.TestCase):
         )
         assert_fetch_url_allowed(
             "https://raw.githubusercontent.com/sreiswig/Playing_with_CadQuery/main/artifacts/m3-shcs/m3-shcs.stl"
+        )
+        assert_fetch_url_allowed(
+            "https://raw.githubusercontent.com/sreiswig/Playing_with_CadQuery/main/m3-nut.step"
+        )
+        assert_fetch_url_allowed(
+            "https://raw.githubusercontent.com/sreiswig/Playing_with_CadQuery/main/artifacts/m3-nut/m3-nut.stl"
         )
         assert_fetch_url_allowed(
             "https://raw.githubusercontent.com/sreiswig/Playing_with_CadQuery/main/headset.step"
