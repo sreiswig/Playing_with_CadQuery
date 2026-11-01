@@ -42,6 +42,9 @@ _REQUIRED_MODELS = (
     "headset-headband",
     "headset-yoke",
     "headset",
+    "bottle-rack-guide",
+    "bottle-rack-gate",
+    "bottle-rack",
 )
 
 

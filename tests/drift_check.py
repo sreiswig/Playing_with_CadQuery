@@ -50,6 +50,9 @@ REQUIRED_MODELS = (
     "headset-headband",
     "headset-yoke",
     "headset",
+    "bottle-rack-guide",
+    "bottle-rack-gate",
+    "bottle-rack",
 )
 BBOX_AXES = ("xlen", "ylen", "zlen")
 

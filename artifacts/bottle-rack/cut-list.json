@@ -1,0 +1,158 @@
+{
+  "units": "mm",
+  "generated_from": "cq_artifacts.bottle_rack_dims.make_bottle_rack",
+  "note": "Shop sizes from the parameters. nominal_full_bottle_kg is a design input for the payload line, not a measured load rating.",
+  "parameters": {
+    "bottle_diameter_mm": 110.0,
+    "bottle_length_mm": 310.0,
+    "lanes": 3,
+    "depth": 5,
+    "slope_deg": 7.0,
+    "thickness_mm": 12.0
+  },
+  "envelope_mm": {
+    "width": 380.0,
+    "depth": 678.871,
+    "height": 524.458
+  },
+  "bounding_box_mm": {
+    "xlen": 389.0,
+    "ylen": 678.871,
+    "zlen": 532.458
+  },
+  "slots": 15,
+  "nominal_full_bottle_kg": 2.1,
+  "nominal_payload_kg": 31.5,
+  "tile_pitch_mm": 380.0,
+  "stack_engagement_mm": 8.0,
+  "pieces": [
+    {
+      "name": "side-panel",
+      "material": "plywood",
+      "qty": 2,
+      "length_mm": 678.871,
+      "width_mm": 524.458,
+      "thickness_mm": 12.0,
+      "notes": "Full sides. Right panel: cable groove, inlet and outlet sensor holes, ESP32 pattern. Left panel: tile pockets."
+    },
+    {
+      "name": "base",
+      "material": "plywood",
+      "qty": 1,
+      "length_mm": 678.871,
+      "width_mm": 356.0,
+      "thickness_mm": 12.0,
+      "notes": "Floor between the side panels."
+    },
+    {
+      "name": "back-panel",
+      "material": "plywood",
+      "qty": 1,
+      "length_mm": 500.458,
+      "width_mm": 316.0,
+      "thickness_mm": 12.0,
+      "notes": "Loading window for each lane."
+    },
+    {
+      "name": "deck",
+      "material": "plywood",
+      "qty": 3,
+      "length_mm": 616.0,
+      "width_mm": 356.0,
+      "thickness_mm": 12.0,
+      "notes": "One sloped lane floor. Install at the module slope."
+    },
+    {
+      "name": "front-apron",
+      "material": "plywood",
+      "qty": 1,
+      "length_mm": 32.0,
+      "width_mm": 356.0,
+      "thickness_mm": 12.0,
+      "notes": "Closes the front below the outlet."
+    },
+    {
+      "name": "top-strip",
+      "material": "plywood",
+      "qty": 2,
+      "length_mm": 78.0,
+      "width_mm": 356.0,
+      "thickness_mm": 12.0,
+      "notes": "Front and rear strips with hooked stack pockets."
+    },
+    {
+      "name": "stack-foot",
+      "material": "plywood",
+      "qty": 4,
+      "length_mm": 24.0,
+      "width_mm": 16.0,
+      "thickness_mm": 8.0,
+      "notes": "Locating foot with a forward toe. Glue or screw under the base."
+    },
+    {
+      "name": "post",
+      "material": "2020 extrusion envelope",
+      "qty": 2,
+      "length_mm": 500.458,
+      "width_mm": 20.0,
+      "thickness_mm": 20.0,
+      "notes": "Rear corners. 20\u00d720 mm outer envelope only; T-slot is not cut here."
+    },
+    {
+      "name": "rail",
+      "material": "2020 extrusion envelope",
+      "qty": 2,
+      "length_mm": 356.0,
+      "width_mm": 20.0,
+      "thickness_mm": 20.0,
+      "notes": "Top front and top rear rails. 20\u00d720 mm outer envelope only."
+    },
+    {
+      "name": "lane-guide",
+      "material": "PLA or PETG",
+      "qty": 6,
+      "length_mm": 616.0,
+      "width_mm": 18.0,
+      "thickness_mm": 16.0,
+      "notes": "Printed side guide. Three 3.4 mm holes in the flange."
+    },
+    {
+      "name": "outlet-gate",
+      "material": "PLA or PETG",
+      "qty": 3,
+      "length_mm": 160.0,
+      "width_mm": 60.5,
+      "thickness_mm": 6.0,
+      "notes": "Printed lift gate with a finger notch. One per lane."
+    },
+    {
+      "name": "tile-pin",
+      "material": "PLA or PETG",
+      "qty": 2,
+      "length_mm": 18.0,
+      "width_mm": 7.6,
+      "thickness_mm": 7.6,
+      "notes": "Press into the right side. The left side of the next module has the pocket."
+    }
+  ],
+  "hardware": [
+    {
+      "name": "M3x12 SHCS",
+      "spec": "ISO 4762 / ISO 888",
+      "qty": 18,
+      "notes": "Lane guides into the decks. Clearance drill 3.4 mm (ISO 273 medium)."
+    },
+    {
+      "name": "M3x10 SHCS",
+      "spec": "ISO 4762 / ISO 888",
+      "qty": 16,
+      "notes": "Two screws at each lane inlet, two at each lane outlet, four on the ESP32 pattern."
+    },
+    {
+      "name": "M3 hex nut",
+      "spec": "ISO 4032",
+      "qty": 16,
+      "notes": "Nuts for the sensor and ESP32 screws."
+    }
+  ]
+}
