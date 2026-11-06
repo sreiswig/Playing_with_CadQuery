@@ -1,4 +1,9 @@
-"""Build STEP/STL for catalog models. Requires CadQuery only at export time."""
+"""Build STEP/STL for catalog models. Requires CadQuery only at export time.
+
+Exporting ``bottle-rack``, ``bottle-rack-guide``, or ``bottle-rack-gate`` also
+refreshes ``artifacts/bottle-rack/cut-list.json`` and ``cut-list.csv`` from the
+default bottle-rack layout.
+"""
 
 from __future__ import annotations
 
@@ -10,6 +15,16 @@ from typing import Any
 from .catalog import MODELS, REPO_ROOT, write_manifest
 from .catalog_lookup import lookup_deny_message, lookup_model
 from .outcome import Err
+
+# Same default layout as ``write_cut_list`` with no layout argument.
+_BOTTLE_RACK_CUT_LIST_IDS = frozenset(
+    {
+        "bottle-rack",
+        "bottle-rack-guide",
+        "bottle-rack-gate",
+    }
+)
+_BOTTLE_RACK_CUT_LIST_DIR = Path("artifacts") / "bottle-rack"
 
 
 def _load_builder(spec: str):
@@ -25,6 +40,13 @@ def _export_shape(shape: Any, dest: Path) -> None:
     cq.exporters.export(shape, str(dest))
 
 
+def _refresh_bottle_rack_cut_list(root: Path) -> None:
+    """Write the default cut list beside the bottle-rack assembly files."""
+    from .bottle_rack_dims import write_cut_list
+
+    write_cut_list(root / _BOTTLE_RACK_CUT_LIST_DIR)
+
+
 @dataclass(frozen=True, slots=True)
 class ExportedModel:
     """Files written for one catalog model, plus the shape that was exported.
@@ -38,7 +60,11 @@ class ExportedModel:
 
 
 def export_model(model_id: str, root: Path | None = None) -> ExportedModel:
-    """Build one catalog model and write its STEP and STL under ``root``."""
+    """Build one catalog model and write its STEP and STL under ``root``.
+
+    Bottle-rack models also refresh ``artifacts/bottle-rack/cut-list.json`` and
+    ``cut-list.csv`` from the default layout.
+    """
     root = root or REPO_ROOT
     found = lookup_model(MODELS, model_id)
     if isinstance(found, Err):
@@ -51,6 +77,8 @@ def export_model(model_id: str, root: Path | None = None) -> ExportedModel:
         dest = root / rel
         _export_shape(shape, dest)
         written[fmt] = rel
+    if model_id in _BOTTLE_RACK_CUT_LIST_IDS:
+        _refresh_bottle_rack_cut_list(root)
     return ExportedModel(files=written, shape=shape)
 
 

@@ -102,7 +102,13 @@ def main(argv: list[str] | None = None) -> int:
     p_list = sub.add_parser("list", help="Print artifacts/manifest.json (no CadQuery needed)")
     p_list.set_defaults(func=_cmd_list)
 
-    p_export = sub.add_parser("export", help="Rebuild STEP/STL (needs CadQuery)")
+    p_export = sub.add_parser(
+        "export",
+        help=(
+            "Rebuild STEP/STL (needs CadQuery). "
+            "Bottle-rack ids also refresh the cut list."
+        ),
+    )
     p_export.add_argument("--id", help="Single model id (default: all)")
     p_export.add_argument("--root", help="Repo root override")
     p_export.set_defaults(func=_cmd_export)
