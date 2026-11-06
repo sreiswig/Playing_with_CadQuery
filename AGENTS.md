@@ -148,15 +148,9 @@ Export imports `create_cat` / `create_drone` / `create_sonic` / `create_box` /
 | bottle-rack-gate | `bottle-rack-gate.step` | `artifacts/bottle-rack-gate/bottle-rack-gate.stl` |
 | bottle-rack   | `bottle-rack.step`      | `artifacts/bottle-rack/bottle-rack.stl`       |
 
-The bottle-rack cut list is generated from the same parameters:
+Exporting `bottle-rack`, `bottle-rack-guide`, or `bottle-rack-gate`, including `python -m cq_artifacts export` with no `--id`, also refreshes the bottle-rack cut list from the same default parameters (`write_cut_list` in `cq_artifacts.bottle_rack_dims`). That writes `artifacts/bottle-rack/cut-list.json` and `cut-list.csv`.
 
-```bash
-python -c "from cq_artifacts.bottle_rack_dims import write_cut_list; write_cut_list('artifacts/bottle-rack')"
-```
-
-That writes `artifacts/bottle-rack/cut-list.json` and `cut-list.csv`.
-
-Then refreshes `artifacts/manifest.json`.
+Export then refreshes `artifacts/manifest.json`.
 
 Do not add a server or auth. This repo is files + a CLI.
 
