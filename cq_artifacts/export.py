@@ -77,8 +77,8 @@ def export_model(model_id: str, root: Path | None = None) -> ExportedModel:
         dest = root / rel
         _export_shape(shape, dest)
         written[fmt] = rel
-    # if model_id in _BOTTLE_RACK_CUT_LIST_IDS:
-    #     _refresh_bottle_rack_cut_list(root)
+    if model_id in _BOTTLE_RACK_CUT_LIST_IDS:
+        _refresh_bottle_rack_cut_list(root)
     return ExportedModel(files=written, shape=shape)
 
 
