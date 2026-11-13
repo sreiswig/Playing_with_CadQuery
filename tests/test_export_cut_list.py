@@ -15,6 +15,7 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from cq_artifacts.bottle_rack_dims import cut_list_csv, cut_list_json, write_cut_list  # noqa: E402
+from cq_artifacts.catalog import MODELS  # noqa: E402
 from cq_artifacts.export import export_all, export_model  # noqa: E402
 
 _BOTTLE_RACK_IDS = ("bottle-rack", "bottle-rack-guide", "bottle-rack-gate")
@@ -105,22 +106,24 @@ class ExportCutListTests(unittest.TestCase):
             self.assertTrue((root / "artifacts" / "manifest.json").is_file())
 
     def test_other_models_leave_an_existing_cut_list_untouched(self):
-        with tempfile.TemporaryDirectory() as tmp:
-            root = Path(tmp)
-            cut_dir = root / "artifacts" / "bottle-rack"
-            cut_dir.mkdir(parents=True)
-            (cut_dir / "cut-list.json").write_text("keep\n", encoding="utf-8")
-            (cut_dir / "cut-list.csv").write_text("keep\n", encoding="utf-8")
-            with _stub_geometry():
-                export_model("box", root=root)
-            self.assertEqual(
-                (cut_dir / "cut-list.json").read_text(encoding="utf-8"),
-                "keep\n",
-            )
-            self.assertEqual(
-                (cut_dir / "cut-list.csv").read_text(encoding="utf-8"),
-                "keep\n",
-            )
+        for model_id in (row["id"] for row in MODELS if row["id"] not in _BOTTLE_RACK_IDS):
+            with self.subTest(model=model_id):
+                with tempfile.TemporaryDirectory() as tmp:
+                    root = Path(tmp)
+                    cut_dir = root / "artifacts" / "bottle-rack"
+                    cut_dir.mkdir(parents=True)
+                    (cut_dir / "cut-list.json").write_text("keep\n", encoding="utf-8")
+                    (cut_dir / "cut-list.csv").write_text("keep\n", encoding="utf-8")
+                    with _stub_geometry():
+                        export_model(model_id, root=root)
+                    self.assertEqual(
+                        (cut_dir / "cut-list.json").read_text(encoding="utf-8"),
+                        "keep\n",
+                    )
+                    self.assertEqual(
+                        (cut_dir / "cut-list.csv").read_text(encoding="utf-8"),
+                        "keep\n",
+                    )
 
     def test_cli_export_id_writes_the_cut_list_from_an_empty_root(self):
         from cq_artifacts.__main__ import main
@@ -132,6 +135,21 @@ class ExportCutListTests(unittest.TestCase):
                 code = main(["export", "--id", "bottle-rack-gate", "--root", str(root)])
             self.assertEqual(code, 0)
             self.assertIn("bottle-rack-gate.step", stdout.getvalue())
+            _assert_default_cut_list(self, root)
+            self.assertTrue((root / "artifacts" / "manifest.json").is_file())
+
+    def test_cli_export_all_refreshes_the_cut_list(self):
+        from cq_artifacts.__main__ import main
+
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            cut_dir = root / "artifacts" / "bottle-rack"
+            cut_dir.mkdir(parents=True)
+            (cut_dir / "cut-list.json").write_text("stale\n", encoding="utf-8")
+            (cut_dir / "cut-list.csv").write_text("stale\n", encoding="utf-8")
+            with _stub_geometry(), redirect_stdout(io.StringIO()):
+                code = main(["export", "--root", str(root)])
+            self.assertEqual(code, 0)
             _assert_default_cut_list(self, root)
             self.assertTrue((root / "artifacts" / "manifest.json").is_file())
 

@@ -112,7 +112,7 @@ Units are millimetres.
 ## Rebuild
 
 ```bash
-python -m cq_artifacts export          # all models → STEP + STL
+python -m cq_artifacts export          # all models → STEP + STL (+ bottle-rack cut list + manifest)
 python -m cq_artifacts export --id cat
 python -m cq_artifacts export --id sonic
 python -m cq_artifacts export --id box
@@ -122,6 +122,7 @@ python -m cq_artifacts export --id m3-nut
 python -m cq_artifacts export --id headset-earcup
 python -m cq_artifacts export --id headset
 python -m cq_artifacts export --id bottle-rack-guide
+python -m cq_artifacts export --id bottle-rack-gate
 python -m cq_artifacts export --id bottle-rack
 ```
 
