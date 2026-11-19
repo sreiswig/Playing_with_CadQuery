@@ -126,6 +126,8 @@ class BuildSmokeTests(unittest.TestCase):
     def _assert_model(self, model_id: str) -> None:
         import cadquery as cq
 
+        from cq_artifacts.bottle_rack_dims import cut_list_csv, cut_list_json
+
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             exported = export_model(model_id, root=root)
@@ -183,6 +185,22 @@ class BuildSmokeTests(unittest.TestCase):
                 0,
                 f"{model_id}: STL triangle count is {triangles}",
             )
+
+            cut_json = root / "artifacts/bottle-rack/cut-list.json"
+            cut_csv = root / "artifacts/bottle-rack/cut-list.csv"
+            if model_id in ("bottle-rack", "bottle-rack-guide", "bottle-rack-gate"):
+                self.assertEqual(
+                    cut_json.read_text(encoding="utf-8"),
+                    cut_list_json(),
+                )
+                self.assertEqual(
+                    cut_csv.read_text(encoding="utf-8"),
+                    cut_list_csv(),
+                )
+            else:
+                self.assertFalse(cut_json.exists())
+                self.assertFalse(cut_csv.exists())
+
             print(
                 f"{model_id}: volume_mm3={volume!r} triangles={triangles}",
                 flush=True,
